@@ -3,7 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="ar.com.westsoft.netbuster.MainActivity">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/nav_home"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="Search"/>
+    <item
+        android:id="@+id/nav_favority"
+        android:icon="@android:drawable/btn_star"
+        android:title="Favority"/>
+    <item
+        android:id="@+id/nav_settings"
+        android:icon="@android:drawable/ic_menu_preferences"
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
