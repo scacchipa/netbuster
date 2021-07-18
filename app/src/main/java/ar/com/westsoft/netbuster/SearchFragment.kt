@@ -1,21 +1,26 @@
 package ar.com.westsoft.netbuster
 
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
+import com.android.volley.toolbox.NetworkImageView
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONObject
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
-class FirstFragment : Fragment() {
+class SearchFragment(val callback: MainActivity) : Fragment() {
 
     var serieAdapter: SerieAdapter? = null
 
@@ -23,18 +28,25 @@ class FirstFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val rootView = inflater.inflate(R.layout.fragment_search, container, false)
-        val serieList:MutableList<SerieData> =  MutableList(0) { SerieData("", "") }
+        var serieArray =  JSONArray()
+
         val recyclerView = rootView.findViewById<RecyclerView>(R.id.recycler_view)
         val gridLayoutManager = GridLayoutManager(context, 2)
         recyclerView.layoutManager = gridLayoutManager
 
-        serieList.add(SerieData("Stranger thing", null))
-        serieList.add(SerieData("KindDoom", null))
-        println("serie list size: "+serieList.size)
-        serieAdapter = SerieAdapter(requireContext(), serieList)
+        serieAdapter = SerieAdapter(requireContext(), serieArray)
         recyclerView.adapter = serieAdapter
         recyclerView.invalidate()
-        println("recycle adapter size: "+recyclerView.adapter!!.itemCount)
+
+        GlobalScope.launch {
+            serieArray = callback.tvAPIClient?.getSyncArrayJsonResponse()?:serieArray
+            activity?.runOnUiThread {
+                recyclerView.adapter = SerieAdapter(requireContext(), serieArray)
+                recyclerView.invalidate()
+            }
+        }
+
+
         return rootView
     }
 
@@ -48,11 +60,11 @@ class FirstFragment : Fragment() {
 
 class SerieData(val name: String, val poster: String?)
 class SerieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val imageView: ImageView = view.findViewById(R.id.cardview_image)
+    val imageView: NetworkImageView = view.findViewById(R.id.cardview_image)
     val title: TextView = view.findViewById(R.id.cardview_text)
 }
 
-class SerieAdapter(val context: Context, val serieList: List<SerieData>)
+class SerieAdapter(val context: Context, val serieList: JSONArray)
     : Adapter<SerieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SerieViewHolder {
@@ -63,12 +75,16 @@ class SerieAdapter(val context: Context, val serieList: List<SerieData>)
     }
 
     override fun onBindViewHolder(holder: SerieViewHolder, position: Int) {
-        holder.imageView.setImageResource(R.drawable.ic_launcher_foreground)
-        holder.title.text = serieList[position].name
+        val show = serieList.getJSONObject(position).getJSONObject("show")
+
+        //holder.imageView.setDefaultImageDrawable(R.drawable.default_image)
+        holder.imageView.setImageUrl(
+            show.getJSONObject("image").getString("medium"),
+            TvAPIClient.instance.imageLoader)
+        holder.title.text = show.getString("name")
     }
 
     override fun getItemCount(): Int {
-        println("Serie list size" + serieList.size)
-        return serieList.size
+        return serieList.length()
     }
 }

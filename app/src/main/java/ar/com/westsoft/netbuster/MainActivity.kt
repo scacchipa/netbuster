@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.json.JSONArray
 
 class MainActivity : AppCompatActivity() {
@@ -21,19 +19,13 @@ class MainActivity : AppCompatActivity() {
 
         val bottonNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         val fragContainer = findViewById<FragmentContainerView>(R.id.fragment_container_view)
-        val firstFragment = FirstFragment()
+        val firstFragment = SearchFragment(this)
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
                 add(R.id.fragment_container_view, firstFragment,"Initial Fragment")
             }
         }
-
-
-        println("Pre runBlcking")
-        GlobalScope.launch { serieArray = tvAPIClient?.getSyncArrayJsonResponse()?:serieArray }
-        println(serieArray.length())
-        println("Post runBlocking")
 
         bottonNav.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
