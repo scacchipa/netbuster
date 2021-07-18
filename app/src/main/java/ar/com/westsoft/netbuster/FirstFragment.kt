@@ -7,8 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
 
@@ -17,10 +17,25 @@ import androidx.recyclerview.widget.RecyclerView.Adapter
  */
 class FirstFragment : Fragment() {
 
+    var serieAdapter: SerieAdapter? = null
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_first, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_search, container, false)
+        val serieList:MutableList<SerieData> =  MutableList(0) { SerieData("", "") }
+        val recyclerView = rootView.findViewById<RecyclerView>(R.id.recycler_view)
+        val gridLayoutManager = GridLayoutManager(context, 2)
+        recyclerView.layoutManager = gridLayoutManager
+
+        serieList.add(SerieData("Stranger thing", null))
+        serieList.add(SerieData("KindDoom", null))
+        println("serie list size: "+serieList.size)
+        serieAdapter = SerieAdapter(requireContext(), serieList)
+        recyclerView.adapter = serieAdapter
+        recyclerView.invalidate()
+        println("recycle adapter size: "+recyclerView.adapter!!.itemCount)
+        return rootView
     }
 
 //    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -31,24 +46,29 @@ class FirstFragment : Fragment() {
 //    }
 }
 
-class SerieData(val name: String, val poster: AppCompatImageView)
+class SerieData(val name: String, val poster: String?)
 class SerieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val imageView: ImageView = view.findViewById(R.id.cardview_image)
-    val text: TextView = view.findViewById(R.id.cardview_text)
+    val title: TextView = view.findViewById(R.id.cardview_text)
 }
 
-class SerieAdapter(val context: Context, val flowerList: List<SerieData>)
+class SerieAdapter(val context: Context, val serieList: List<SerieData>)
     : Adapter<SerieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SerieViewHolder {
-        TODO("Not yet implemented")
+        val view = LayoutInflater
+            .from(parent.context)
+            .inflate(R.layout.recyclerview_row_item, parent, false)
+        return SerieViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: SerieViewHolder, position: Int) {
-        TODO("Not yet implemented")
+        holder.imageView.setImageResource(R.drawable.ic_launcher_foreground)
+        holder.title.text = serieList[position].name
     }
 
     override fun getItemCount(): Int {
-        TODO("Not yet implemented")
+        println("Serie list size" + serieList.size)
+        return serieList.size
     }
 }

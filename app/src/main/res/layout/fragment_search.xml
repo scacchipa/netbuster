@@ -66,7 +66,8 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.gridlayout.widget.GridLayout
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="4dp"
@@ -79,5 +80,5 @@
         app:layout_constraintTop_toBottomOf="@+id/view"
         app:layout_constraintVertical_bias="1.0">
 
-    </androidx.gridlayout.widget.GridLayout>
+    </androidx.recyclerview.widget.RecyclerView>
 </androidx.constraintlayout.widget.ConstraintLayout>
