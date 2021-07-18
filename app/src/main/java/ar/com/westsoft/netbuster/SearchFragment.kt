@@ -1,11 +1,12 @@
 package ar.com.westsoft.netbuster
 
 import android.content.Context
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -15,7 +16,6 @@ import com.android.volley.toolbox.NetworkImageView
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONArray
-import org.json.JSONObject
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -39,10 +39,27 @@ class SearchFragment(val callback: MainActivity) : Fragment() {
         recyclerView.invalidate()
 
         GlobalScope.launch {
-            serieArray = callback.tvAPIClient?.getSyncArrayJsonResponse()?:serieArray
+            serieArray = callback.tvAPIClient?.getSyncArrayJsonResponse("girl")?:serieArray
             activity?.runOnUiThread {
                 recyclerView.adapter = SerieAdapter(requireContext(), serieArray)
                 recyclerView.invalidate()
+            }
+        }
+
+        val searchField:EditText = rootView.findViewById(R.id.search_key)
+        val delButton:ImageButton = rootView.findViewById(R.id.delete_text_button)
+        val searchButton:ImageButton = rootView.findViewById(R.id.search_button)
+
+        delButton.setOnClickListener { searchField.setText("") }
+        searchButton.setOnClickListener {
+            println(searchField.text.toString())
+            GlobalScope.launch {
+                serieArray = callback.tvAPIClient?.
+                        getSyncArrayJsonResponse(searchField.text.toString())?:serieArray
+                activity?.runOnUiThread {
+                    recyclerView.adapter = SerieAdapter(requireContext(), serieArray)
+                    recyclerView.invalidate()
+                }
             }
         }
 
@@ -58,7 +75,6 @@ class SearchFragment(val callback: MainActivity) : Fragment() {
 //    }
 }
 
-class SerieData(val name: String, val poster: String?)
 class SerieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val imageView: NetworkImageView = view.findViewById(R.id.cardview_image)
     val title: TextView = view.findViewById(R.id.cardview_text)
@@ -77,11 +93,12 @@ class SerieAdapter(val context: Context, val serieList: JSONArray)
     override fun onBindViewHolder(holder: SerieViewHolder, position: Int) {
         val show = serieList.getJSONObject(position).getJSONObject("show")
 
-        //holder.imageView.setDefaultImageDrawable(R.drawable.default_image)
+        holder.imageView.setDefaultImageResId(android.R.drawable.ic_menu_gallery)
         holder.imageView.setImageUrl(
             show.getJSONObject("image").getString("medium"),
             TvAPIClient.instance.imageLoader)
         holder.title.text = show.getString("name")
+        println("Download: "+ show.getJSONObject("image").getString("medium"))
     }
 
     override fun getItemCount(): Int {
