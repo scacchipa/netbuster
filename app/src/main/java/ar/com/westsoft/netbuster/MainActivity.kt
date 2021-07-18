@@ -2,16 +2,38 @@ package ar.com.westsoft.netbuster
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentContainerView
+import androidx.fragment.app.commit
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.json.JSONArray
 
 class MainActivity : AppCompatActivity() {
+
+    var tvAPIClient: TvAPIClient? = null
+    var serieArray = JSONArray()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        tvAPIClient = TvAPIClient(this)
 
         val bottonNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        val fragContainer = findViewById<FragmentContainerView>(R.id.fragment_container_view)
+        val firstFragment = FirstFragment()
+        if (savedInstanceState == null) {
+            supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                add(R.id.fragment_container_view, firstFragment,"Initial Fragment")
+            }
+        }
+
+
+        println("Pre runBlcking")
+        GlobalScope.launch { serieArray = tvAPIClient?.getSyncArrayJsonResponse()?:serieArray }
+        println(serieArray.length())
+        println("Post runBlocking")
 
         bottonNav.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
@@ -29,12 +51,6 @@ class MainActivity : AppCompatActivity() {
                 }
                 else -> super.onOptionsItemSelected(menuItem)
             }
-        }
-
-        findViewById<FloatingActionButton>(R.id.fab).setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
-
         }
     }
 }
