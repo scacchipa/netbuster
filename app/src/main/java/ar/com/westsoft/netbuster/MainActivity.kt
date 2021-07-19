@@ -33,7 +33,10 @@ class MainActivity : AppCompatActivity() {
         bottonNav.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_home -> {
-                    println("nav_home as selected")
+                    supportFragmentManager.commit {
+                        setReorderingAllowed(true)
+                        replace(R.id.fragment_container_view, searchFragment!!,"Poster Fragment")
+                    }
                     true
                 }
                 R.id.nav_favority -> {

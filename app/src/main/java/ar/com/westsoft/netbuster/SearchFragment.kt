@@ -1,9 +1,11 @@
 package ar.com.westsoft.netbuster
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
@@ -51,13 +53,15 @@ class SearchFragment(val callback: MainActivity) : Fragment() {
 
         delButton.setOnClickListener { searchField.setText("") }
         searchButton.setOnClickListener {
-            println(searchField.text.toString())
             GlobalScope.launch {
                 serieArray = callback.tvAPIClient?.
                         getSyncArrayJsonResponse(searchField.text.toString())?:serieArray
                 activity?.runOnUiThread {
                     recyclerView.adapter = SerieAdapter(callback, serieArray)
                     recyclerView.invalidate()
+
+                    val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    imm.hideSoftInputFromWindow(view?.windowToken, 0)
                 }
             }
         }
