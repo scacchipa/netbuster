@@ -11,11 +11,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import java.util.concurrent.CountDownLatch
 
-/**
- * Instrumented test, which will execute on an Android device.
- *
- * See [testing documentation](http://d.android.com/tools/testing).
- */
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {
     lateinit var appContext: Context
@@ -53,7 +48,8 @@ class ExampleInstrumentedTest {
     }
     @Test
     fun asynGetResponse() = runBlocking {
-        assertEquals(tvAPIClient.getSyncStringResponse("girl").length, 3381)
-        assertEquals(tvAPIClient.getSyncArrayJsonResponse("query").length(), 2)
+        assertEquals(tvAPIClient.getSyncSerieStringResponse("girl").length, 13536)
+        assertEquals(tvAPIClient.getSyncSerieArrayJsonResponse("query").length(), 2)
+        assertEquals(tvAPIClient.getSyncEpisodeArrayJsonResponse(1).length(), 39)
     }
 }

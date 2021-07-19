@@ -2,6 +2,7 @@ package ar.com.westsoft.netbuster
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.util.Log
 import android.util.LruCache
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.ImageLoader
@@ -21,7 +22,7 @@ class TvAPIClient(val context: Context) {
     init {
         instance = this
     }
-    val url: String = "https://api.tvmaze.com/"
+    val url: String = "https://api.tvmaze.com"
     var queue: RequestQueue = Volley.newRequestQueue(context)
     var imageLoader = ImageLoader(queue, object : ImageLoader.ImageCache {
         private val mCache = LruCache<String, Bitmap>(2*1024*1024)
@@ -36,7 +37,7 @@ class TvAPIClient(val context: Context) {
     suspend fun getSyncStringResponse(text: String): String =
         suspendCoroutine { continuation ->
                 val stringRequest = StringRequest(
-                    "$url/search/shows?q=$text",
+                    text,
                     { response -> continuation.resume(response) },
                     { continuation.resumeWithException(it) })
                 queue.add(stringRequest)
@@ -44,11 +45,22 @@ class TvAPIClient(val context: Context) {
     suspend fun getSyncArrayJsonResponse(text: String): JSONArray =
         suspendCoroutine { continuation ->
             val stringRequest = JsonArrayRequest(
-                "$url/search/shows?q=$text",
+                text,
                 { response -> continuation.resume(response) },
                 { continuation.resumeWithException(it) })
             queue.add(stringRequest)
         }
+
+    suspend fun getSyncSerieStringResponse(text: String): String =
+        getSyncStringResponse("$url/search/shows?q=$text")
+
+    suspend fun getSyncSerieArrayJsonResponse(text: String): JSONArray =
+        getSyncArrayJsonResponse("$url/search/shows?q=$text")
+
+    suspend fun getSyncEpisodeArrayJsonResponse(serie: Int): JSONArray {
+        Log.d("url","$url/shows/$serie/episodes")
+        return getSyncArrayJsonResponse("$url/shows/$serie/episodes")
+    }
 }
 
 

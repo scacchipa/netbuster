@@ -18,9 +18,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 
-/**
- * A simple [Fragment] subclass as the second destination in the navigation.
- */
 class SearchFragment(val callback: MainActivity) : Fragment() {
 
     var serieAdapter: SerieAdapter? = null
@@ -40,7 +37,7 @@ class SearchFragment(val callback: MainActivity) : Fragment() {
         recyclerView.invalidate()
 
         GlobalScope.launch {
-            serieArray = callback.tvAPIClient?.getSyncArrayJsonResponse("girl")?:serieArray
+            serieArray = callback.tvAPIClient?.getSyncSerieArrayJsonResponse("girl")?:serieArray
             activity?.runOnUiThread {
                 recyclerView.adapter = SerieAdapter(callback, serieArray)
                 recyclerView.invalidate()
@@ -68,13 +65,6 @@ class SearchFragment(val callback: MainActivity) : Fragment() {
 
         return rootView
     }
-
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//        view.findViewById<Button>(R.id.button_first).setOnClickListener {
-//            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
-//        }
-//    }
 }
 
 class SerieViewHolder(view: View) : RecyclerView.ViewHolder(view) {

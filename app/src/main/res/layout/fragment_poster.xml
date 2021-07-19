@@ -16,8 +16,9 @@
             android:id="@+id/poster_image"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_gallery"
+            android:layout_marginTop="8dp"
 
+            android:src="@android:drawable/ic_menu_gallery"
             app:layout_constraintBottom_toTopOf="@+id/name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -74,20 +75,18 @@
             android:layout_marginBottom="8dp"
             android:text="Summary"
             app:layout_constraintWidth_percent="0.8"
-            app:layout_constraintBottom_toTopOf="@+id/episodes"
+            app:layout_constraintBottom_toTopOf="@+id/episodeDisplay"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.3"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/gender" />
 
-        <TextView
-            android:id="@+id/episodes"
-            android:layout_width="wrap_content"
+        <ar.com.westsoft.netbuster.ExpandableSeasonList
+            android:id="@+id/episodeDisplay"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Episodes: "
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.3"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/summmary" />
     </androidx.constraintlayout.widget.ConstraintLayout>
