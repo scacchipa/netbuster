@@ -23,15 +23,16 @@ class ExpandableSeasonList(ctx: Context, attrs: AttributeSet?) :
         val expandButton: ImageButton = findViewById(R.id.expand_button)
         val seasonListView: LinearLayout = findViewById(R.id.season_list)
 
-        seasonButton.setOnClickListener {
-            if (seasonListView.isVisible) {
-                seasonListView.visibility = GONE
-                expandButton.setImageResource(android.R.drawable.arrow_down_float)
-            } else {
-                seasonListView.visibility = VISIBLE
-                expandButton.setImageResource(android.R.drawable.arrow_up_float)
-            }
-            this.invalidate()
+        seasonButton.setOnClickListener { toggle(seasonListView, expandButton) }
+        expandButton.setOnClickListener { toggle(seasonListView, expandButton) }
+    }
+    private fun toggle(seasonListView: LinearLayout, expandButton: ImageButton ) {
+        if (seasonListView.isVisible) {
+            seasonListView.visibility = GONE
+            expandButton.setImageResource(android.R.drawable.arrow_down_float)
+        } else {
+            seasonListView.visibility = VISIBLE
+            expandButton.setImageResource(android.R.drawable.arrow_up_float)
         }
     }
     fun setTitle(text: String) {
@@ -52,16 +53,18 @@ class ExpandableEpisodesList(ctx: Context) : ConstraintLayout(ctx) {
 
         val seasonButton: Button = findViewById(R.id.season)
         val expandButton: ImageButton = findViewById(R.id.expandButton)
-        val seasonListView: LinearLayout = findViewById(R.id.episodeListView)
+        val episodeListView: LinearLayout = findViewById(R.id.episodeListView)
 
-        seasonButton.setOnClickListener {
-            if (seasonListView.isVisible) {
-                seasonListView.visibility = GONE
-                expandButton.setImageResource(android.R.drawable.arrow_down_float)
-            } else {
-                seasonListView.visibility = VISIBLE
-                expandButton.setImageResource(android.R.drawable.arrow_up_float)
-            }
+        seasonButton.setOnClickListener { toggle(episodeListView, expandButton) }
+        expandButton.setOnClickListener { toggle(episodeListView, expandButton) }
+    }
+    private fun toggle(episodeListView: LinearLayout, expandButton: ImageButton ) {
+        if (episodeListView.isVisible) {
+            episodeListView.visibility = GONE
+            expandButton.setImageResource(android.R.drawable.arrow_down_float)
+        } else {
+            episodeListView.visibility = VISIBLE
+            expandButton.setImageResource(android.R.drawable.arrow_up_float)
         }
     }
     fun setTitle(text: String) {

@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import com.android.volley.toolbox.NetworkImageView
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import org.json.JSONException
 import org.json.JSONObject
 
 class PosterFragment(val callback: MainActivity) : Fragment() {
@@ -37,20 +38,25 @@ class PosterFragment(val callback: MainActivity) : Fragment() {
             val summary: WebView = view.findViewById(R.id.summmary)
 
             posterImage.setDefaultImageResId(android.R.drawable.ic_menu_gallery)
-            posterImage.setImageUrl(
-                jsonObject!!.getJSONObject("image").getString("original"),
-                TvAPIClient.instance.imageLoader
-            )
+            try {
+                posterImage.setImageUrl(
+                    jsonObject!!.getJSONObject("image").getString("original"),
+                    TvAPIClient.instance.imageLoader
+                )
+            } catch (e: JSONException) { e.printStackTrace() }
             name.text = jsonObject!!.getString("name")
 
             val scheduleObj = jsonObject!!.getJSONObject("schedule")
+            var scheduleText = scheduleObj.getString("time")
             val daysObjs = scheduleObj.getJSONArray("days")
-            var scheduleText = scheduleObj.getString("time") + " ("
-            for (idx in 0 until daysObjs.length()) {
-                scheduleText += daysObjs.getString(idx)
-                if (idx != daysObjs.length() - 1) scheduleText += " - "
+            if (daysObjs.length() > 0) {
+                scheduleText += " ("
+                for (idx in 0 until daysObjs.length()) {
+                    scheduleText += daysObjs.getString(idx)
+                    if (idx != daysObjs.length() - 1) scheduleText += " - "
+                }
+                scheduleText += ")"
             }
-            scheduleText += ")"
             schedule.text = scheduleText
 
             val genresArray = jsonObject!!.getJSONArray("genres")
@@ -58,9 +64,11 @@ class PosterFragment(val callback: MainActivity) : Fragment() {
             for (idx in 0 until genresArray.length()) genresText += " " + genresArray.getString(idx)
             gender.text = genresText
 
-            setEpisodes(jsonObject!!.getInt("id"), episodesView)
+            try {
+                summary.loadData(jsonObject!!.getString("summary"), "text/html", "UTF_8")
+            } catch (e: JSONException) { e.printStackTrace() }
 
-            summary.loadData(jsonObject!!.getString("summary"), "text/html", "UTF_8")
+            setEpisodes(jsonObject!!.getInt("id"), episodesView)
         }
     }
 
@@ -140,6 +148,7 @@ class EpisodeElement(val season: Int, val number: Int, val jsonObject: JSONObjec
     fun createView(ctx: Context): View {
         val textView = TextView(ctx)
         textView.text = ""+ number + " - " + jsonObject.getString("name")
+        textView.textSize = 16f
         return textView
     }
 }

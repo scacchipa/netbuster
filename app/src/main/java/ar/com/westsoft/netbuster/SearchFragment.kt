@@ -17,6 +17,7 @@ import com.android.volley.toolbox.NetworkImageView
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONArray
+import org.json.JSONException
 
 class SearchFragment(val callback: MainActivity) : Fragment() {
 
@@ -52,7 +53,7 @@ class SearchFragment(val callback: MainActivity) : Fragment() {
         searchButton.setOnClickListener {
             GlobalScope.launch {
                 serieArray = callback.tvAPIClient?.
-                        getSyncArrayJsonResponse(searchField.text.toString())?:serieArray
+                        getSyncSerieArrayJsonResponse(searchField.text.toString())?:serieArray
                 activity?.runOnUiThread {
                     recyclerView.adapter = SerieAdapter(callback, serieArray)
                     recyclerView.invalidate()
@@ -62,7 +63,6 @@ class SearchFragment(val callback: MainActivity) : Fragment() {
                 }
             }
         }
-
         return rootView
     }
 }
@@ -83,11 +83,14 @@ class SerieAdapter(val context: MainActivity, val serieList: JSONArray)
     }
     override fun onBindViewHolder(holder: SerieViewHolder, position: Int) {
         val jsonObject = serieList.getJSONObject(position).getJSONObject("show")
-
         holder.imageView.setDefaultImageResId(android.R.drawable.ic_menu_gallery)
-        holder.imageView.setImageUrl(
-            jsonObject.getJSONObject("image").getString("medium"),
-            TvAPIClient.instance.imageLoader)
+        try {
+            holder.imageView.setImageUrl(
+                jsonObject.getJSONObject("image").getString("medium"),
+                TvAPIClient.instance.imageLoader)
+        } catch (e: JSONException) {
+            e.printStackTrace()
+        }
         holder.imageView.setOnClickListener { context.showPoster(jsonObject) }
 
         holder.title.text = jsonObject.getString("name")
