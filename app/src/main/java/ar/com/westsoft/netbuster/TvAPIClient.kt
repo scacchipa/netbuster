@@ -24,7 +24,7 @@ class TvAPIClient(val context: Context) {
     val url: String = "https://api.tvmaze.com/"
     var queue: RequestQueue = Volley.newRequestQueue(context)
     var imageLoader = ImageLoader(queue, object : ImageLoader.ImageCache {
-        private val mCache = LruCache<String, Bitmap>(10)
+        private val mCache = LruCache<String, Bitmap>(2*1024*1024)
         override fun putBitmap(url: String, bitmap: Bitmap) {
             mCache.put(url, bitmap)
         }

@@ -1,6 +1,5 @@
 package ar.com.westsoft.netbuster
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,14 +33,14 @@ class SearchFragment(val callback: MainActivity) : Fragment() {
         val gridLayoutManager = GridLayoutManager(context, 2)
         recyclerView.layoutManager = gridLayoutManager
 
-        serieAdapter = SerieAdapter(requireContext(), serieArray)
+        serieAdapter = SerieAdapter(callback, serieArray)
         recyclerView.adapter = serieAdapter
         recyclerView.invalidate()
 
         GlobalScope.launch {
             serieArray = callback.tvAPIClient?.getSyncArrayJsonResponse("girl")?:serieArray
             activity?.runOnUiThread {
-                recyclerView.adapter = SerieAdapter(requireContext(), serieArray)
+                recyclerView.adapter = SerieAdapter(callback, serieArray)
                 recyclerView.invalidate()
             }
         }
@@ -57,12 +56,11 @@ class SearchFragment(val callback: MainActivity) : Fragment() {
                 serieArray = callback.tvAPIClient?.
                         getSyncArrayJsonResponse(searchField.text.toString())?:serieArray
                 activity?.runOnUiThread {
-                    recyclerView.adapter = SerieAdapter(requireContext(), serieArray)
+                    recyclerView.adapter = SerieAdapter(callback, serieArray)
                     recyclerView.invalidate()
                 }
             }
         }
-
 
         return rootView
     }
@@ -80,27 +78,27 @@ class SerieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val title: TextView = view.findViewById(R.id.cardview_text)
 }
 
-class SerieAdapter(val context: Context, val serieList: JSONArray)
+class SerieAdapter(val context: MainActivity, val serieList: JSONArray)
     : Adapter<SerieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SerieViewHolder {
-        val view = LayoutInflater
+        val cardView = LayoutInflater
             .from(parent.context)
             .inflate(R.layout.recyclerview_row_item, parent, false)
-        return SerieViewHolder(view)
+        return SerieViewHolder(cardView)
     }
-
     override fun onBindViewHolder(holder: SerieViewHolder, position: Int) {
-        val show = serieList.getJSONObject(position).getJSONObject("show")
+        val jsonObject = serieList.getJSONObject(position).getJSONObject("show")
 
         holder.imageView.setDefaultImageResId(android.R.drawable.ic_menu_gallery)
         holder.imageView.setImageUrl(
-            show.getJSONObject("image").getString("medium"),
+            jsonObject.getJSONObject("image").getString("medium"),
             TvAPIClient.instance.imageLoader)
-        holder.title.text = show.getString("name")
-        println("Download: "+ show.getJSONObject("image").getString("medium"))
-    }
+        holder.imageView.setOnClickListener { context.showPoster(jsonObject) }
 
+        holder.title.text = jsonObject.getString("name")
+
+    }
     override fun getItemCount(): Int {
         return serieList.length()
     }

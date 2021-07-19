@@ -2,15 +2,18 @@ package ar.com.westsoft.netbuster
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentContainerView
 import androidx.fragment.app.commit
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.json.JSONArray
+import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
 
     var tvAPIClient: TvAPIClient? = null
     var serieArray = JSONArray()
+
+    var searchFragment: SearchFragment? = null
+    var posterFragment: PosterFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,12 +21,12 @@ class MainActivity : AppCompatActivity() {
         tvAPIClient = TvAPIClient(this)
 
         val bottonNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        val fragContainer = findViewById<FragmentContainerView>(R.id.fragment_container_view)
-        val firstFragment = SearchFragment(this)
+        searchFragment = SearchFragment(this)
+        posterFragment = PosterFragment(this)
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
-                add(R.id.fragment_container_view, firstFragment,"Initial Fragment")
+                add(R.id.fragment_container_view, searchFragment!!,"Initial Fragment")
             }
         }
 
@@ -43,6 +46,13 @@ class MainActivity : AppCompatActivity() {
                 }
                 else -> super.onOptionsItemSelected(menuItem)
             }
+        }
+    }
+    fun showPoster(jsonObject: JSONObject){
+        posterFragment?.setSerie(jsonObject)
+        supportFragmentManager.commit {
+            setReorderingAllowed(true)
+            replace(R.id.fragment_container_view, posterFragment!!,"Poster Fragment")
         }
     }
 }
