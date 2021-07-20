@@ -1,4 +1,4 @@
-package ar.com.westsoft.netbuster
+package ar.com.westsoft.netbuster.core
 
 import android.content.Context
 import android.os.Bundle
@@ -9,6 +9,7 @@ import android.webkit.WebView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import ar.com.westsoft.netbuster.R
 import com.android.volley.toolbox.NetworkImageView
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

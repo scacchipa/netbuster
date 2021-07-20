@@ -3,6 +3,7 @@ package ar.com.westsoft.netbuster
 import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
+import ar.com.westsoft.netbuster.core.TvAPIClient
 import com.android.volley.toolbox.StringRequest
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals

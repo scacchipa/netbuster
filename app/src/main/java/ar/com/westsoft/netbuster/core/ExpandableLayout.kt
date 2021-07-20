@@ -1,4 +1,4 @@
-package ar.com.westsoft.netbuster
+package ar.com.westsoft.netbuster.core
 
 import android.content.Context
 import android.util.AttributeSet
@@ -8,6 +8,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
+import ar.com.westsoft.netbuster.R
 
 class ExpandableSeasonList(ctx: Context, attrs: AttributeSet?) :
     ConstraintLayout(ctx, attrs) {

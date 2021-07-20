@@ -1,8 +1,9 @@
-package ar.com.westsoft.netbuster
+package ar.com.westsoft.netbuster.core
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.commit
+import ar.com.westsoft.netbuster.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.json.JSONArray
 import org.json.JSONObject

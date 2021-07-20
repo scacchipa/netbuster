@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PosterFragment">
+    tools:context=".core.PosterFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -67,7 +67,7 @@
             app:layout_constraintStart_toStartOf="@+id/name"
             app:layout_constraintTop_toBottomOf="@+id/schedule" />
 
-        <ar.com.westsoft.netbuster.ExpandableSeasonList
+        <ar.com.westsoft.netbuster.core.ExpandableSeasonList
             android:id="@+id/episodeDisplay"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

@@ -1,4 +1,4 @@
-package ar.com.westsoft.netbuster
+package ar.com.westsoft.netbuster.core
 
 import android.content.Context
 import android.os.Bundle
@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
+import ar.com.westsoft.netbuster.R
 import com.android.volley.toolbox.NetworkImageView
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

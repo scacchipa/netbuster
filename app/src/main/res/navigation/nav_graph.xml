@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/FirstFragment"
-        android:name="ar.com.westsoft.netbuster.SearchFragment"
+        android:name="ar.com.westsoft.netbuster.core.SearchFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_search">
 
@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
-        android:name="ar.com.westsoft.netbuster.PosterFragment"
+        android:name="ar.com.westsoft.netbuster.core.PosterFragment"
         android:label="@string/second_fragment_label"
         tools:layout="@layout/fragment_poster">
 

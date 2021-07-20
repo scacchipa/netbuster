@@ -1,4 +1,4 @@
-package ar.com.westsoft.netbuster
+package ar.com.westsoft.netbuster.core
 
 import android.content.Intent
 import android.net.Uri
@@ -11,6 +11,7 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import ar.com.westsoft.netbuster.R
 import com.android.volley.toolbox.NetworkImageView
 import org.json.JSONException
 import org.json.JSONObject
