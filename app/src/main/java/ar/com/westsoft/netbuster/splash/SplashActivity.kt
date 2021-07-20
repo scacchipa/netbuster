@@ -11,18 +11,20 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SplashActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_view)
         GlobalScope.launch {
-            delay(5000)
+            delay(3000)
             val sharedPref = PreferenceManager.getDefaultSharedPreferences(baseContext)
 
-            if (sharedPref?.getBoolean("authMode", false) == true)
+            if (sharedPref?.getBoolean("authMode", false) == true) {
                 startActivity(Intent(baseContext, CheckingActivity::class.java))
-            else
+                finish()
+            } else {
                 startActivity(Intent(baseContext, MainActivity::class.java))
+                finish()
+            }
         }
     }
 }

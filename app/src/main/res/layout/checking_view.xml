@@ -22,7 +22,7 @@
             android:textSize="16sp" />
 
         <EditText
-            android:id="@+id/editTextTextPassword"
+            android:id="@+id/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
@@ -34,10 +34,10 @@
             android:layout_height="match_parent">
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/check_pin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Check P.I.N."
+                android:text="Sign in"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/fingetButton"
                 app:layout_constraintStart_toStartOf="parent"
@@ -49,11 +49,11 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="2dp"
-                app:layout_constraintBottom_toBottomOf="@+id/button"
+                app:layout_constraintBottom_toBottomOf="@+id/check_pin"
                 app:layout_constraintDimensionRatio="h,1:1"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/button"
-                app:layout_constraintTop_toTopOf="@+id/button"
+                app:layout_constraintStart_toEndOf="@+id/check_pin"
+                app:layout_constraintTop_toTopOf="@+id/check_pin"
                 app:srcCompat="?android:attr/fingerprintAuthDrawable" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
