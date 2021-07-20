@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import androidx.biometric.BiometricManager
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 import ar.com.westsoft.netbuster.R
@@ -30,8 +29,6 @@ class ConfigFragment(val callback: MainActivity) : Fragment() {
 
         authModeCB?.isChecked = sharedPref?.getBoolean("authMode", false) ?: false
         authModeCB?.setOnCheckedChangeListener { checkButton, _ ->
-            if (!checkBiometricDeviceIsOk()) checkButton.isChecked = false
-
             refreshPasswodConsole(checkButton.isChecked)
         }
         passwordET?.addTextChangedListener( textWatcher)
@@ -76,29 +73,6 @@ class ConfigFragment(val callback: MainActivity) : Fragment() {
         saveB = null
     }
 
-    fun checkBiometricDeviceIsOk() : Boolean{
-        val biometricManager = BiometricManager.from(callback)
-        when (biometricManager.canAuthenticate(
-            BiometricManager.Authenticators.BIOMETRIC_STRONG
-                    or BiometricManager.Authenticators.DEVICE_CREDENTIAL)) {
-            BiometricManager.BIOMETRIC_SUCCESS ->
-                Toast.makeText(callback,  "You can authenticate using biometrics.", Toast.LENGTH_SHORT)
-                    .show()
-            BiometricManager.BIOMETRIC_ERROR_NO_HARDWARE ->
-                Toast.makeText(callback, "No biometric features available on this device.", Toast.LENGTH_SHORT)
-                    .show()
-            BiometricManager.BIOMETRIC_ERROR_HW_UNAVAILABLE ->
-                Toast.makeText(callback, "Biometric features are currently unavailable.", Toast.LENGTH_SHORT)
-                    .show()
-            BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> {
-                Toast.makeText(callback, "Authentication failed. You are not enrolled",
-                    Toast.LENGTH_LONG)
-                    .show()
-                return false
-            }
-        }
-        return true
-    }
     fun refreshPasswodConsole(checkState: Boolean) {
         passwordET?.isEnabled = checkState
         repeatPWET?.isEnabled = checkState

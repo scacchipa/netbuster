@@ -7,6 +7,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
@@ -61,6 +62,8 @@ class CheckingActivity : AppCompatActivity() {
             .setNegativeButtonText("Use account password")
             .build()
 
+        biometricLoginButton.isEnabled = checkBiometricDeviceIsOk()
+
         biometricLoginButton.setOnClickListener {
             biometricPrompt.authenticate(promptInfo)
         }
@@ -74,4 +77,14 @@ class CheckingActivity : AppCompatActivity() {
         startActivity(Intent(baseContext, MainActivity::class.java))
         finish()
     }
+    fun checkBiometricDeviceIsOk() : Boolean{
+        val biometricManager = BiometricManager.from(this)
+        when (biometricManager.canAuthenticate(
+            BiometricManager.Authenticators.BIOMETRIC_STRONG
+                    or BiometricManager.Authenticators.DEVICE_CREDENTIAL)) {
+            BiometricManager.BIOMETRIC_SUCCESS -> return true
+            else ->return false
+        }
+    }
+
 }
