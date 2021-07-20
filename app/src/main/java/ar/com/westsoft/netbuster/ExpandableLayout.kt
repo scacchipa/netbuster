@@ -6,11 +6,8 @@ import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.get
 import androidx.core.view.isVisible
-import org.json.JSONObject
 
 class ExpandableSeasonList(ctx: Context, attrs: AttributeSet?) :
     ConstraintLayout(ctx, attrs) {
@@ -38,13 +35,6 @@ class ExpandableSeasonList(ctx: Context, attrs: AttributeSet?) :
     fun setTitle(text: String) {
         findViewById<Button>(R.id.season_button).text = text
     }
-    fun appendSeason(idx: Int) {
-        findViewById<LinearLayout>(R.id.season_list).
-            addView(ExpandableEpisodesList(context))
-    }
-    fun getSeason(idx: Int): ExpandableEpisodesList =
-        findViewById<LinearLayout>(R.id.season_list).
-            get(idx) as ExpandableEpisodesList
 }
 class ExpandableEpisodesList(ctx: Context) : ConstraintLayout(ctx) {
     init {
@@ -69,14 +59,5 @@ class ExpandableEpisodesList(ctx: Context) : ConstraintLayout(ctx) {
     }
     fun setTitle(text: String) {
         findViewById<Button>(R.id.season).text = text
-    }
-    fun appendEpisode(jsonObject: JSONObject) {
-        val textView = TextView(context)
-        textView.text = "Texto Prueba"
-        findViewById<LinearLayout>(R.id.episodeListView).
-            addView(textView)
-    }
-    fun getEpisode(idx: Int): TextView {
-        return findViewById<LinearLayout>(R.id.season_list)[idx] as TextView
     }
 }

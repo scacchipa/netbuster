@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity() {
 
     var searchFragment: SearchFragment? = null
     var posterFragment: PosterFragment? = null
+    var episodeFragment: EpisodeFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
         val bottonNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         searchFragment = SearchFragment(this)
         posterFragment = PosterFragment(this)
+        episodeFragment = EpisodeFragment(this)
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
@@ -56,6 +58,13 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.commit {
             setReorderingAllowed(true)
             replace(R.id.fragment_container_view, posterFragment!!,"Poster Fragment")
+        }
+    }
+    fun showEpisodeInfo(jsonObject: JSONObject, serieTitle: String) {
+        episodeFragment?.setInfo(jsonObject, serieTitle)
+        supportFragmentManager. commit {
+            setReorderingAllowed(true)
+            replace(R.id.fragment_container_view, episodeFragment!!)
         }
     }
 }

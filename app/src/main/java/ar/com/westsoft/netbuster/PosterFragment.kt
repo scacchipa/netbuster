@@ -16,7 +16,7 @@ import org.json.JSONException
 import org.json.JSONObject
 
 class PosterFragment(val callback: MainActivity) : Fragment() {
-    var jsonObject: JSONObject? = null
+    var serieJsonObj: JSONObject? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
@@ -26,10 +26,10 @@ class PosterFragment(val callback: MainActivity) : Fragment() {
     }
 
     fun setSerie(jsonObject: JSONObject) {
-        this.jsonObject = jsonObject
+        this.serieJsonObj = jsonObject
     }
     fun refreshView(view: View) {
-        if (jsonObject != null) {
+        if (serieJsonObj != null) {
             val posterImage: NetworkImageView = view.findViewById(R.id.poster_image)
             val name: TextView = view.findViewById(R.id.name)
             val schedule: TextView = view.findViewById(R.id.schedule)
@@ -40,13 +40,13 @@ class PosterFragment(val callback: MainActivity) : Fragment() {
             posterImage.setDefaultImageResId(android.R.drawable.ic_menu_gallery)
             try {
                 posterImage.setImageUrl(
-                    jsonObject!!.getJSONObject("image").getString("original"),
+                    serieJsonObj!!.getJSONObject("image").getString("original"),
                     TvAPIClient.instance.imageLoader
                 )
             } catch (e: JSONException) { e.printStackTrace() }
-            name.text = jsonObject!!.getString("name")
+            name.text = serieJsonObj!!.getString("name")
 
-            val scheduleObj = jsonObject!!.getJSONObject("schedule")
+            val scheduleObj = serieJsonObj!!.getJSONObject("schedule")
             var scheduleText = scheduleObj.getString("time")
             val daysObjs = scheduleObj.getJSONArray("days")
             if (daysObjs.length() > 0) {
@@ -59,20 +59,20 @@ class PosterFragment(val callback: MainActivity) : Fragment() {
             }
             schedule.text = scheduleText
 
-            val genresArray = jsonObject!!.getJSONArray("genres")
+            val genresArray = serieJsonObj!!.getJSONArray("genres")
             var genresText = ""
             for (idx in 0 until genresArray.length()) genresText += " " + genresArray.getString(idx)
             gender.text = genresText
 
             try {
-                summary.loadData(jsonObject!!.getString("summary"), "text/html", "UTF_8")
+                summary.loadData(serieJsonObj!!.getString("summary"), "text/html", "UTF_8")
             } catch (e: JSONException) { e.printStackTrace() }
 
-            setEpisodes(jsonObject!!.getInt("id"), episodesView)
+            setEpisodes(serieJsonObj!!.getInt("id"), serieJsonObj!!.getString("name"), episodesView)
         }
     }
 
-    fun setEpisodes(id: Int, episodesView: ExpandableSeasonList) {
+    fun setEpisodes(id: Int, serieTitle: String, episodesView: ExpandableSeasonList) {
         GlobalScope.launch {
             val episodesJSONArray = callback.tvAPIClient!!.getSyncEpisodeArrayJsonResponse(id)
 
@@ -81,6 +81,8 @@ class PosterFragment(val callback: MainActivity) : Fragment() {
             for (idx in 0 until episodesJSONArray.length()) {
                 val jsonEpisode = episodesJSONArray[idx] as JSONObject
                 epiTree.appendEpisode(
+                    callback,
+                    serieTitle,
                     jsonEpisode.getInt("season"),
                     jsonEpisode.getInt("number"),
                     jsonEpisode)
@@ -97,14 +99,14 @@ class PosterFragment(val callback: MainActivity) : Fragment() {
 class SeasonTree {
     private val seasonList: MutableList<SeasonElement> = emptyList<SeasonElement>().toMutableList()
 
-    fun appendEpisode(season: Int, number: Int, jsonObject: JSONObject) {
+    fun appendEpisode(callback: MainActivity, serieTitle: String, season: Int, number: Int, jsonObject: JSONObject) {
         var seasonElement = seasonList.find { it.season == season }
 
         if (seasonElement == null) {
             seasonElement = SeasonElement(season)
             seasonList.add(seasonElement)
         }
-        seasonElement.appendEpisode(number, jsonObject)
+        seasonElement.appendEpisode(callback, serieTitle, number, jsonObject)
     }
     fun sort() {
         seasonList.sortBy { it.season }
@@ -124,11 +126,11 @@ class SeasonTree {
 }
 class SeasonElement(val season: Int) {
     val episodesList: MutableList<EpisodeElement> = emptyList<EpisodeElement>().toMutableList()
-    fun appendEpisode(number: Int, jsonObject: JSONObject) {
+    fun appendEpisode(callback: MainActivity, serieTitle: String, number: Int, jsonObject: JSONObject) {
         var episodeElement = episodesList.find { it.number == number }
 
         if (episodeElement == null) {
-            episodeElement = EpisodeElement(season, number, jsonObject)
+            episodeElement = EpisodeElement(callback, serieTitle , number, jsonObject)
             episodesList.add(episodeElement)
         }
     }
@@ -144,11 +146,12 @@ class SeasonElement(val season: Int) {
         }
     }
 }
-class EpisodeElement(val season: Int, val number: Int, val jsonObject: JSONObject) {
+class EpisodeElement(val callback: MainActivity, val serieTitle: String, val number: Int, val jsonObject: JSONObject) {
     fun createView(ctx: Context): View {
         val textView = TextView(ctx)
         textView.text = ""+ number + " - " + jsonObject.getString("name")
         textView.textSize = 16f
+        textView.setOnClickListener { callback.showEpisodeInfo(jsonObject, serieTitle) }
         return textView
     }
 }

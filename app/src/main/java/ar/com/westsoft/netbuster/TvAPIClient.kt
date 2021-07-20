@@ -2,14 +2,12 @@ package ar.com.westsoft.netbuster
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.util.Log
 import android.util.LruCache
+import com.android.volley.Request
 import com.android.volley.RequestQueue
-import com.android.volley.toolbox.ImageLoader
-import com.android.volley.toolbox.JsonArrayRequest
-import com.android.volley.toolbox.StringRequest
-import com.android.volley.toolbox.Volley
+import com.android.volley.toolbox.*
 import org.json.JSONArray
+import org.json.JSONObject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -44,11 +42,20 @@ class TvAPIClient(val context: Context) {
         }
     suspend fun getSyncArrayJsonResponse(text: String): JSONArray =
         suspendCoroutine { continuation ->
-            val stringRequest = JsonArrayRequest(
+            val jsonArrayRequest = JsonArrayRequest(
                 text,
                 { response -> continuation.resume(response) },
                 { continuation.resumeWithException(it) })
-            queue.add(stringRequest)
+            queue.add(jsonArrayRequest)
+        }
+    suspend fun getSyncObjectJsonResponse(text: String): JSONObject =
+        suspendCoroutine { continuation ->
+            val jsonObjRequest = JsonObjectRequest(
+                Request.Method.GET,
+                text, null,
+                { response -> continuation.resume(response) },
+                { continuation.resumeWithException(it) })
+            queue.add(jsonObjRequest)
         }
 
     suspend fun getSyncSerieStringResponse(text: String): String =
@@ -57,10 +64,11 @@ class TvAPIClient(val context: Context) {
     suspend fun getSyncSerieArrayJsonResponse(text: String): JSONArray =
         getSyncArrayJsonResponse("$url/search/shows?q=$text")
 
-    suspend fun getSyncEpisodeArrayJsonResponse(serie: Int): JSONArray {
-        Log.d("url","$url/shows/$serie/episodes")
-        return getSyncArrayJsonResponse("$url/shows/$serie/episodes")
-    }
+    suspend fun getSyncEpisodeArrayJsonResponse(serie: Int): JSONArray =
+        getSyncArrayJsonResponse("$url/shows/$serie/episodes")
+
+    suspend fun getSyncEpisodeInfoJsonResponse(episodeId: Int): JSONObject =
+        getSyncObjectJsonResponse("$url/episodes/$episodeId")
 }
 
 
