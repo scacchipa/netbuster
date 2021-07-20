@@ -16,6 +16,7 @@ class MainActivity : AppCompatActivity() {
     var searchFragment: SearchFragment? = null
     var posterFragment: PosterFragment? = null
     var episodeFragment: EpisodeFragment? = null
+    var configFragment: ConfigFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         searchFragment = SearchFragment(this)
         posterFragment = PosterFragment(this)
         episodeFragment = EpisodeFragment(this)
+        configFragment = ConfigFragment(this)
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
@@ -47,7 +49,10 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_settings -> {
-                    print("nav_setting was selected")
+                    supportFragmentManager.commit {
+                        setReorderingAllowed(true)
+                        replace(R.id.fragment_container_view, configFragment!!, "Config Fragment")
+                    }
                     true
                 }
                 else -> super.onOptionsItemSelected(menuItem)
