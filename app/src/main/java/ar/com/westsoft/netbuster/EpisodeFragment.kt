@@ -1,5 +1,7 @@
 package ar.com.westsoft.netbuster
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +14,7 @@ import androidx.fragment.app.Fragment
 import com.android.volley.toolbox.NetworkImageView
 import org.json.JSONException
 import org.json.JSONObject
+
 
 class EpisodeFragment(val callback: MainActivity)
     : Fragment() {
@@ -51,10 +54,13 @@ class EpisodeFragment(val callback: MainActivity)
                     TvAPIClient.instance.imageLoader)
             } catch (e : JSONException) { e.printStackTrace() }
             summaryWV?.loadData(jsonObjEpisode?.getString("summary"), "text/html", "UTF-8")
-            backIB?.setOnClickListener { println("Back") }
+            backIB?.setOnClickListener { callback.showSeriePoster() }
             goToPageB?.setOnClickListener {
-                println("Go to page" + jsonObjEpisode?.getString("url"))
-
+                println(jsonObjEpisode?.getString("url"))
+                val browserIntent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse(jsonObjEpisode?.getString("url")))
+                startActivity(browserIntent)
             }
         }
     }

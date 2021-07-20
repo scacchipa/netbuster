@@ -53,8 +53,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    fun showPoster(jsonObject: JSONObject){
-        posterFragment?.setSerie(jsonObject)
+    fun showSeriePoster(jsonObject: JSONObject){
+        posterFragment?.serieJsonObj = jsonObject
+        showSeriePoster()
+    }
+    fun showSeriePoster(){
         supportFragmentManager.commit {
             setReorderingAllowed(true)
             replace(R.id.fragment_container_view, posterFragment!!,"Poster Fragment")

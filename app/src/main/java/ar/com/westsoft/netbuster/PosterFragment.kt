@@ -24,10 +24,6 @@ class PosterFragment(val callback: MainActivity) : Fragment() {
         refreshView(rootView)
         return rootView
     }
-
-    fun setSerie(jsonObject: JSONObject) {
-        this.serieJsonObj = jsonObject
-    }
     fun refreshView(view: View) {
         if (serieJsonObj != null) {
             val posterImage: NetworkImageView = view.findViewById(R.id.poster_image)
@@ -35,7 +31,7 @@ class PosterFragment(val callback: MainActivity) : Fragment() {
             val schedule: TextView = view.findViewById(R.id.schedule)
             val gender: TextView = view.findViewById(R.id.gender)
             val episodesView: ExpandableSeasonList = view.findViewById(R.id.episodeDisplay)
-            val summary: WebView = view.findViewById(R.id.summmary)
+            val summary: WebView = view.findViewById(R.id.summary)
 
             posterImage.setDefaultImageResId(android.R.drawable.ic_menu_gallery)
             try {

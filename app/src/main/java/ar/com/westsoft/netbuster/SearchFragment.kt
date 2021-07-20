@@ -91,7 +91,7 @@ class SerieAdapter(val context: MainActivity, val serieList: JSONArray)
         } catch (e: JSONException) {
             e.printStackTrace()
         }
-        holder.imageView.setOnClickListener { context.showPoster(jsonObject) }
+        holder.imageView.setOnClickListener { context.showSeriePoster(jsonObject) }
 
         holder.title.text = jsonObject.getString("name")
 
