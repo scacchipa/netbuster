@@ -44,21 +44,24 @@ class MainActivity : FragmentActivity() {
                 R.id.nav_home -> {
                     supportFragmentManager.commit {
                         setReorderingAllowed(true)
-                        replace(R.id.fragment_container_view, searchFragment!!,"Poster Fragment")
+                        if (!searchFragment!!.isVisible)
+                            replace(R.id.fragment_container_view, searchFragment!!,"Poster Fragment")
                     }
                     true
                 }
                 R.id.nav_favorite -> {
                     supportFragmentManager.commit {
                         setReorderingAllowed(true)
-                        replace(R.id.fragment_container_view, favoriteFragment!!,"Poster Fragment")
+                        if (!favoriteFragment!!.isVisible)
+                            replace(R.id.fragment_container_view, favoriteFragment!!,"Poster Fragment")
                     }
                     true
                 }
                 R.id.nav_settings -> {
                     supportFragmentManager.commit {
                         setReorderingAllowed(true)
-                        replace(R.id.fragment_container_view, configFragment!!, "Config Fragment")
+                        if (!configFragment!!.isVisible)
+                            replace(R.id.fragment_container_view, configFragment!!, "Config Fragment")
                     }
                     true
                 }
