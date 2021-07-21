@@ -3,6 +3,7 @@ package ar.com.westsoft.netbuster.core
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
+import androidx.preference.PreferenceManager
 import ar.com.westsoft.netbuster.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.json.JSONArray
@@ -64,6 +65,8 @@ class MainActivity : FragmentActivity() {
                 else -> super.onOptionsItemSelected(menuItem)
             }
         }
+        favoritySerieArray = JSONArray(PreferenceManager.getDefaultSharedPreferences(baseContext)
+            .getString("favoriteSeries", "[]"))
     }
     fun showSeriePoster(jsonObject: JSONObject){
         posterFragment?.serieJsonObj = jsonObject

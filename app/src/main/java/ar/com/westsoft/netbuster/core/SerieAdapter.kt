@@ -2,6 +2,7 @@ package ar.com.westsoft.netbuster.core
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import ar.com.westsoft.netbuster.R
 import org.json.JSONArray
@@ -37,7 +38,7 @@ class SerieAdapter(val callback: MainActivity, val serieArray: JSONArray, val fa
         updateStarIV(holder, id)
 
         holder.starIV.setOnClickListener {
-            val favorityIdPos: Int? = favoryArrayContainsId(id)
+            val favorityIdPos: Int? = favoriteArrayContainsId(id)
             if (favorityIdPos == null) {
                 callback.appendToFavoryArray(serieArray.getJSONObject(position))
                 callback.favoritySerieAdapter?.notifyItemInserted(position)
@@ -47,20 +48,25 @@ class SerieAdapter(val callback: MainActivity, val serieArray: JSONArray, val fa
                 callback.favoritySerieAdapter?.notifyItemRemoved(favorityIdPos)
             }
             updateStarIV(holder, id)
+
+            with(PreferenceManager.getDefaultSharedPreferences(callback.baseContext).edit()) {
+                this?.putString("favoriteSeries", callback.favoritySerieArray.toString())
+                this?.apply()
+            }
         }
     }
 
     override fun getItemCount(): Int {
         return serieArray.length()
     }
-    private fun favoryArrayContainsId(favorityId: Int) : Int? {
+    private fun favoriteArrayContainsId(favoriteId: Int) : Int? {
         for (idx in 0 until favorityArray.length())
-            if (favorityArray.getJSONObject(idx).getJSONObject("show").getInt("id") == favorityId)
+            if (favorityArray.getJSONObject(idx).getJSONObject("show").getInt("id") == favoriteId)
                 return idx
         return null
     }
     private fun updateStarIV(holder: SerieViewHolder, id: Int) {
-        if (favoryArrayContainsId(id) != null)
+        if (favoriteArrayContainsId(id) != null)
             holder.starIV.setImageResource(android.R.drawable.btn_star_big_on)
         else
             holder.starIV.setImageResource(android.R.drawable.btn_star_big_off)
