@@ -10,9 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import ar.com.westsoft.netbuster.R
 
 class FavorityFragment(val callback: MainActivity) : Fragment() {
-
-    var serieAdapter: SerieAdapter? = null
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
@@ -21,8 +18,8 @@ class FavorityFragment(val callback: MainActivity) : Fragment() {
         val recyclerView = rootView.findViewById<RecyclerView>(R.id.favority_recycler_view)
         recyclerView.layoutManager = GridLayoutManager(context, 2)
 
-        serieAdapter = SerieAdapter(callback, callback.favoritySerieArray)
-        recyclerView.adapter = serieAdapter
+        callback.favoritySerieAdapter = SerieAdapter(callback, callback.favoritySerieArray, callback.favoritySerieArray)
+        recyclerView.adapter = callback.favoritySerieAdapter
         recyclerView.invalidate()
 
         return rootView

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
@@ -33,14 +34,14 @@ class SearchFragment(val callback: MainActivity) : Fragment() {
         val recyclerView = rootView.findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.layoutManager = GridLayoutManager(context, 2)
 
-        serieAdapter = SerieAdapter(callback, serieArray)
+        serieAdapter = SerieAdapter(callback, serieArray, callback.favoritySerieArray)
         recyclerView.adapter = serieAdapter
         recyclerView.invalidate()
 
         GlobalScope.launch {
             serieArray = callback.tvAPIClient?.getSyncSerieArrayJsonResponse("girl")?:serieArray
             activity?.runOnUiThread {
-                recyclerView.adapter = SerieAdapter(callback, serieArray)
+                recyclerView.adapter = SerieAdapter(callback, serieArray, callback.favoritySerieArray)
                 recyclerView.invalidate()
             }
         }
@@ -55,7 +56,7 @@ class SearchFragment(val callback: MainActivity) : Fragment() {
                 serieArray = callback.tvAPIClient?.
                         getSyncSerieArrayJsonResponse(searchField.text.toString())?:serieArray
                 activity?.runOnUiThread {
-                    recyclerView.adapter = SerieAdapter(callback, serieArray)
+                    recyclerView.adapter = SerieAdapter(callback, serieArray, callback.favoritySerieArray)
                     recyclerView.invalidate()
 
                     val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -68,11 +69,12 @@ class SearchFragment(val callback: MainActivity) : Fragment() {
 }
 
 class SerieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val imageView: NetworkImageView = view.findViewById(R.id.cardview_image)
-    val title: TextView = view.findViewById(R.id.cardview_text)
+    val imageV: NetworkImageView = view.findViewById(R.id.cardview_image)
+    val titleV: TextView = view.findViewById(R.id.cardview_text)
+    val starIV: ImageView = view.findViewById(R.id.star_view)
 }
 
-class SerieAdapter(val context: MainActivity, val serieList: JSONArray)
+class SerieAdapter(val callback: MainActivity, val serieArray: JSONArray, val favorityArray: JSONArray)
     : Adapter<SerieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SerieViewHolder {
@@ -81,22 +83,53 @@ class SerieAdapter(val context: MainActivity, val serieList: JSONArray)
             .inflate(R.layout.recyclerview_row_item, parent, false)
         return SerieViewHolder(cardView)
     }
+
     override fun onBindViewHolder(holder: SerieViewHolder, position: Int) {
-        val jsonObject = serieList.getJSONObject(position).getJSONObject("show")
-        holder.imageView.setDefaultImageResId(android.R.drawable.ic_menu_gallery)
+        val showJsonObj = serieArray.getJSONObject(position).getJSONObject("show")
+        holder.imageV.setDefaultImageResId(android.R.drawable.ic_menu_gallery)
         try {
-            holder.imageView.setImageUrl(
-                jsonObject.getJSONObject("image").getString("medium"),
-                TvAPIClient.instance.imageLoader)
+            holder.imageV.setImageUrl(
+                showJsonObj.getJSONObject("image").getString("medium"),
+                TvAPIClient.instance.imageLoader
+            )
         } catch (e: JSONException) {
             e.printStackTrace()
         }
-        holder.imageView.setOnClickListener { context.showSeriePoster(jsonObject) }
+        holder.imageV.setOnClickListener { callback.showSeriePoster(showJsonObj) }
 
-        holder.title.text = jsonObject.getString("name")
+        holder.titleV.text = showJsonObj.getString("name")
 
+        val id = showJsonObj.getInt("id")
+
+        updateStarIV(holder, id)
+
+        holder.starIV.setOnClickListener {
+            val favorityIdPos: Int? = favoryArrayContainsId(id)
+            if (favorityIdPos == null) {
+                callback.appendToFavoryArray(serieArray.getJSONObject(position))
+                callback.favoritySerieAdapter?.notifyItemInserted(position)
+            }
+            else {
+                callback.removeFromFavorityArray(favorityIdPos)
+                callback.favoritySerieAdapter?.notifyItemRemoved(favorityIdPos)
+            }
+            updateStarIV(holder, id)
+        }
     }
+
     override fun getItemCount(): Int {
-        return serieList.length()
+        return serieArray.length()
+    }
+    private fun favoryArrayContainsId(favorityId: Int) : Int? {
+        for (idx in 0 until favorityArray.length())
+            if (favorityArray.getJSONObject(idx).getJSONObject("show").getInt("id") == favorityId)
+                return idx
+        return null
+    }
+    private fun updateStarIV(holder: SerieViewHolder, id: Int) {
+        if (favoryArrayContainsId(id) != null)
+            holder.starIV.setImageResource(android.R.drawable.btn_star_big_on)
+        else
+            holder.starIV.setImageResource(android.R.drawable.btn_star_big_off)
     }
 }

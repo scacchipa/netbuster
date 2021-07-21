@@ -12,6 +12,7 @@ class MainActivity : FragmentActivity() {
 
     var tvAPIClient: TvAPIClient? = null
     var favoritySerieArray = JSONArray()
+    var favoritySerieAdapter: SerieAdapter? = null
 
     var searchFragment: SearchFragment? = null
     var posterFragment: PosterFragment? = null
@@ -80,5 +81,11 @@ class MainActivity : FragmentActivity() {
             setReorderingAllowed(true)
             replace(R.id.fragment_container_view, episodeFragment!!)
         }
+    }
+    fun appendToFavoryArray( serieJsonObj: JSONObject) {
+        favoritySerieArray.put(serieJsonObj)
+    }
+    fun removeFromFavorityArray(favorityIdPos: Int) {
+        favoritySerieArray.remove(favorityIdPos)
     }
 }
