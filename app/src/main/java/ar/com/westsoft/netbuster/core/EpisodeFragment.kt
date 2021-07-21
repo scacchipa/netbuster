@@ -17,14 +17,13 @@ import org.json.JSONException
 import org.json.JSONObject
 
 
-class EpisodeFragment(val callback: MainActivity)
+class EpisodeFragment(private val callback: MainActivity)
     : Fragment() {
     var jsonObjEpisode: JSONObject? = null
     var serieTitle: String? = null
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater,
+                              container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
         val rootView = inflater.inflate(R.layout.episode_info, container, false)
         refreshView(rootView)
         return rootView
@@ -34,7 +33,7 @@ class EpisodeFragment(val callback: MainActivity)
         this.jsonObjEpisode = jsonObjEpisode
         this.serieTitle = serieTitle
     }
-    fun refreshView(rootView: View) {
+    private fun refreshView(rootView: View) {
         if (jsonObjEpisode != null) {
             val serieTitleTV = rootView.findViewById<TextView>(R.id.serie_title)
             val episodeTitleTV = rootView.findViewById<TextView>(R.id.episode_title)

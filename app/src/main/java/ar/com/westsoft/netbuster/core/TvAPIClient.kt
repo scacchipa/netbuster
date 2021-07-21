@@ -12,7 +12,6 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-
 class TvAPIClient(val context: Context) {
     companion object {
         lateinit var instance: TvAPIClient
@@ -66,9 +65,6 @@ class TvAPIClient(val context: Context) {
 
     suspend fun getSyncEpisodeArrayJsonResponse(serie: Int): JSONArray =
         getSyncArrayJsonResponse("$url/shows/$serie/episodes")
-
-    suspend fun getSyncEpisodeInfoJsonResponse(episodeId: Int): JSONObject =
-        getSyncObjectJsonResponse("$url/episodes/$episodeId")
 }
 
 

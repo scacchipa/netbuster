@@ -8,8 +8,8 @@ import ar.com.westsoft.netbuster.R
 import org.json.JSONArray
 import org.json.JSONException
 
-class SerieAdapter(val callback: MainActivity, val serieArray: JSONArray, val favorityArray: JSONArray)
-    : RecyclerView.Adapter<SerieViewHolder>() {
+class SerieAdapter(private val callback: MainActivity, val serieArray: JSONArray,
+                   val favoriteArray: JSONArray): RecyclerView.Adapter<SerieViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SerieViewHolder {
         val cardView = LayoutInflater
@@ -38,19 +38,19 @@ class SerieAdapter(val callback: MainActivity, val serieArray: JSONArray, val fa
         updateStarIV(holder, id)
 
         holder.starIV.setOnClickListener {
-            val favorityIdPos: Int? = favoriteArrayContainsId(id)
-            if (favorityIdPos == null) {
+            val favoriteIdPos: Int? = favoriteArrayContainsId(id)
+            if (favoriteIdPos == null) {
                 callback.appendToFavoryArray(serieArray.getJSONObject(position))
-                callback.favoritySerieAdapter?.notifyItemInserted(position)
+                callback.favoriteSerieAdapter?.notifyItemInserted(position)
             }
             else {
-                callback.removeFromFavorityArray(favorityIdPos)
-                callback.favoritySerieAdapter?.notifyItemRemoved(favorityIdPos)
+                callback.removeFromFavoriteArray(favoriteIdPos)
+                callback.favoriteSerieAdapter?.notifyItemRemoved(favoriteIdPos)
             }
             updateStarIV(holder, id)
 
             with(PreferenceManager.getDefaultSharedPreferences(callback.baseContext).edit()) {
-                this?.putString("favoriteSeries", callback.favoritySerieArray.toString())
+                this?.putString("favoriteSeries", callback.favoriteSerieArray.toString())
                 this?.apply()
             }
         }
@@ -60,8 +60,8 @@ class SerieAdapter(val callback: MainActivity, val serieArray: JSONArray, val fa
         return serieArray.length()
     }
     private fun favoriteArrayContainsId(favoriteId: Int) : Int? {
-        for (idx in 0 until favorityArray.length())
-            if (favorityArray.getJSONObject(idx).getJSONObject("show").getInt("id") == favoriteId)
+        for (idx in 0 until favoriteArray.length())
+            if (favoriteArray.getJSONObject(idx).getJSONObject("show").getInt("id") == favoriteId)
                 return idx
         return null
     }

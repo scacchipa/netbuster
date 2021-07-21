@@ -7,9 +7,9 @@
         android:icon="@android:drawable/ic_menu_search"
         android:title="Search"/>
     <item
-        android:id="@+id/nav_favority"
+        android:id="@+id/nav_favorite"
         android:icon="@android:drawable/btn_star"
-        android:title="Favority"/>
+        android:title="Favorite" />
     <item
         android:id="@+id/nav_settings"
         android:icon="@android:drawable/ic_menu_preferences"

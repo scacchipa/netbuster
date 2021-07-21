@@ -12,14 +12,14 @@ import org.json.JSONObject
 class MainActivity : FragmentActivity() {
 
     var tvAPIClient: TvAPIClient? = null
-    var favoritySerieArray = JSONArray()
-    var favoritySerieAdapter: SerieAdapter? = null
+    var favoriteSerieArray = JSONArray()
+    var favoriteSerieAdapter: SerieAdapter? = null
 
     var searchFragment: SearchFragment? = null
     var posterFragment: PosterFragment? = null
     var episodeFragment: EpisodeFragment? = null
     var configFragment: ConfigFragment? = null
-    var favorityFragment: FavorityFragment? = null
+    var favoriteFragment: FavoriteFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +31,7 @@ class MainActivity : FragmentActivity() {
         posterFragment = PosterFragment(this)
         episodeFragment = EpisodeFragment(this)
         configFragment = ConfigFragment(this)
-        favorityFragment = FavorityFragment(this)
+        favoriteFragment = FavoriteFragment(this)
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
@@ -48,10 +48,10 @@ class MainActivity : FragmentActivity() {
                     }
                     true
                 }
-                R.id.nav_favority -> {
+                R.id.nav_favorite -> {
                     supportFragmentManager.commit {
                         setReorderingAllowed(true)
-                        replace(R.id.fragment_container_view, favorityFragment!!,"Poster Fragment")
+                        replace(R.id.fragment_container_view, favoriteFragment!!,"Poster Fragment")
                     }
                     true
                 }
@@ -65,7 +65,7 @@ class MainActivity : FragmentActivity() {
                 else -> super.onOptionsItemSelected(menuItem)
             }
         }
-        favoritySerieArray = JSONArray(PreferenceManager.getDefaultSharedPreferences(baseContext)
+        favoriteSerieArray = JSONArray(PreferenceManager.getDefaultSharedPreferences(baseContext)
             .getString("favoriteSeries", "[]"))
     }
     fun showSeriePoster(jsonObject: JSONObject){
@@ -86,9 +86,9 @@ class MainActivity : FragmentActivity() {
         }
     }
     fun appendToFavoryArray( serieJsonObj: JSONObject) {
-        favoritySerieArray.put(serieJsonObj)
+        favoriteSerieArray.put(serieJsonObj)
     }
-    fun removeFromFavorityArray(favorityIdPos: Int) {
-        favoritySerieArray.remove(favorityIdPos)
+    fun removeFromFavoriteArray(favoriteIdPos: Int) {
+        favoriteSerieArray.remove(favoriteIdPos)
     }
 }

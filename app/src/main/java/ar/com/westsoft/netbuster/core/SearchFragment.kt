@@ -8,18 +8,15 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ar.com.westsoft.netbuster.R
-import com.android.volley.toolbox.NetworkImageView
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.json.JSONArray
 
-class SearchFragment(val callback: MainActivity) : Fragment() {
+class SearchFragment(private val callback: MainActivity) : Fragment() {
 
     var serieAdapter: SerieAdapter? = null
 
@@ -32,14 +29,14 @@ class SearchFragment(val callback: MainActivity) : Fragment() {
         val recyclerView = rootView.findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.layoutManager = GridLayoutManager(context, 2)
 
-        serieAdapter = SerieAdapter(callback, serieArray, callback.favoritySerieArray)
+        serieAdapter = SerieAdapter(callback, serieArray, callback.favoriteSerieArray)
         recyclerView.adapter = serieAdapter
         recyclerView.invalidate()
 
         GlobalScope.launch {
             serieArray = callback.tvAPIClient?.getSyncSerieArrayJsonResponse("girl")?:serieArray
             activity?.runOnUiThread {
-                recyclerView.adapter = SerieAdapter(callback, serieArray, callback.favoritySerieArray)
+                recyclerView.adapter = SerieAdapter(callback, serieArray, callback.favoriteSerieArray)
                 recyclerView.invalidate()
             }
         }
@@ -54,7 +51,7 @@ class SearchFragment(val callback: MainActivity) : Fragment() {
                 serieArray = callback.tvAPIClient?.
                         getSyncSerieArrayJsonResponse(searchField.text.toString())?:serieArray
                 activity?.runOnUiThread {
-                    recyclerView.adapter = SerieAdapter(callback, serieArray, callback.favoritySerieArray)
+                    recyclerView.adapter = SerieAdapter(callback, serieArray, callback.favoriteSerieArray)
                     recyclerView.invalidate()
 
                     val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

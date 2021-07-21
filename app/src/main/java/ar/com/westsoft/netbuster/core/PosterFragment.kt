@@ -18,14 +18,13 @@ import org.json.JSONObject
 
 class PosterFragment(val callback: MainActivity) : Fragment() {
     var serieJsonObj: JSONObject? = null
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
         val rootView = inflater.inflate(R.layout.fragment_poster, container, false)
         refreshView(rootView)
         return rootView
     }
-    fun refreshView(view: View) {
+    private fun refreshView(view: View) {
         if (serieJsonObj != null) {
             val posterImage: NetworkImageView = view.findViewById(R.id.poster_image)
             val name: TextView = view.findViewById(R.id.name)
@@ -69,7 +68,7 @@ class PosterFragment(val callback: MainActivity) : Fragment() {
         }
     }
 
-    fun setEpisodes(id: Int, serieTitle: String, episodesView: ExpandableSeasonList) {
+    private fun setEpisodes(id: Int, serieTitle: String, episodesView: ExpandableSeasonList) {
         GlobalScope.launch {
             val episodesJSONArray = callback.tvAPIClient!!.getSyncEpisodeArrayJsonResponse(id)
 
@@ -122,7 +121,7 @@ class SeasonTree {
     }
 }
 class SeasonElement(val season: Int) {
-    val episodesList: MutableList<EpisodeElement> = emptyList<EpisodeElement>().toMutableList()
+    private val episodesList: MutableList<EpisodeElement> = emptyList<EpisodeElement>().toMutableList()
     fun appendEpisode(callback: MainActivity, serieTitle: String, number: Int, jsonObject: JSONObject) {
         var episodeElement = episodesList.find { it.number == number }
 
@@ -143,7 +142,8 @@ class SeasonElement(val season: Int) {
         }
     }
 }
-class EpisodeElement(val callback: MainActivity, val serieTitle: String, val number: Int, val jsonObject: JSONObject) {
+class EpisodeElement(private val callback: MainActivity, val serieTitle: String,
+                     val number: Int, val jsonObject: JSONObject) {
     fun createView(ctx: Context): View {
         val textView = TextView(ctx)
         textView.text = ""+ number + " - " + jsonObject.getString("name")
