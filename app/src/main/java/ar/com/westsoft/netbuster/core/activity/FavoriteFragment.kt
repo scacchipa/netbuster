@@ -1,4 +1,4 @@
-package ar.com.westsoft.netbuster.core
+package ar.com.westsoft.netbuster.core.activity
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ar.com.westsoft.netbuster.R
+import ar.com.westsoft.netbuster.core.adapter.SerieAdapter
 
 class FavoriteFragment(private val callback: MainActivity) : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

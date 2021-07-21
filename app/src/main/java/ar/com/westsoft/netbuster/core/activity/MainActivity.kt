@@ -1,10 +1,12 @@
-package ar.com.westsoft.netbuster.core
+package ar.com.westsoft.netbuster.core.activity
 
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
 import androidx.preference.PreferenceManager
 import ar.com.westsoft.netbuster.R
+import ar.com.westsoft.netbuster.core.adapter.SerieAdapter
+import ar.com.westsoft.netbuster.core.client.TvAPIClient
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.json.JSONArray
 import org.json.JSONObject

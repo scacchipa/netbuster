@@ -37,28 +37,3 @@ class ExpandableSeasonList(ctx: Context, attrs: AttributeSet?) :
         findViewById<Button>(R.id.season_button).text = text
     }
 }
-class ExpandableEpisodesList(ctx: Context) : ConstraintLayout(ctx) {
-    init {
-        val inflater = ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        inflater.inflate(R.layout.expandable_episodes_view,this)
-
-        val seasonButton: Button = findViewById(R.id.season)
-        val expandButton: ImageButton = findViewById(R.id.expandButton)
-        val episodeListView: LinearLayout = findViewById(R.id.episodeListView)
-
-        seasonButton.setOnClickListener { toggle(episodeListView, expandButton) }
-        expandButton.setOnClickListener { toggle(episodeListView, expandButton) }
-    }
-    private fun toggle(episodeListView: LinearLayout, expandButton: ImageButton ) {
-        if (episodeListView.isVisible) {
-            episodeListView.visibility = GONE
-            expandButton.setImageResource(android.R.drawable.arrow_down_float)
-        } else {
-            episodeListView.visibility = VISIBLE
-            expandButton.setImageResource(android.R.drawable.arrow_up_float)
-        }
-    }
-    fun setTitle(text: String) {
-        findViewById<Button>(R.id.season).text = text
-    }
-}

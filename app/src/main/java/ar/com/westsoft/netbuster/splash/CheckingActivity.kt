@@ -12,7 +12,7 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import ar.com.westsoft.netbuster.R
-import ar.com.westsoft.netbuster.core.MainActivity
+import ar.com.westsoft.netbuster.core.activity.MainActivity
 import java.util.concurrent.Executor
 
 class CheckingActivity : AppCompatActivity() {

@@ -1,4 +1,4 @@
-package ar.com.westsoft.netbuster.core
+package ar.com.westsoft.netbuster.core.activity
 
 import android.os.Bundle
 import android.text.Editable

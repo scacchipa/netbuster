@@ -1,4 +1,4 @@
-package ar.com.westsoft.netbuster.core
+package ar.com.westsoft.netbuster.core.adapter
 
 import android.view.View
 import android.widget.ImageView

@@ -1,10 +1,12 @@
-package ar.com.westsoft.netbuster.core
+package ar.com.westsoft.netbuster.core.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import ar.com.westsoft.netbuster.R
+import ar.com.westsoft.netbuster.core.client.TvAPIClient
+import ar.com.westsoft.netbuster.core.activity.MainActivity
 import org.json.JSONArray
 import org.json.JSONException
 

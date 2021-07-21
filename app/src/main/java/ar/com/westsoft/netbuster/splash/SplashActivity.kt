@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import ar.com.westsoft.netbuster.R
-import ar.com.westsoft.netbuster.core.MainActivity
+import ar.com.westsoft.netbuster.core.activity.MainActivity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch

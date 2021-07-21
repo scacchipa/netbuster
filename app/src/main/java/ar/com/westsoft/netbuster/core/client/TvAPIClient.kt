@@ -1,4 +1,4 @@
-package ar.com.westsoft.netbuster.core
+package ar.com.westsoft.netbuster.core.client
 
 import android.content.Context
 import android.graphics.Bitmap
