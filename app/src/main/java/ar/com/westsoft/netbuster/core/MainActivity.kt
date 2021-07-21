@@ -1,22 +1,23 @@
 package ar.com.westsoft.netbuster.core
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
 import ar.com.westsoft.netbuster.R
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.json.JSONArray
 import org.json.JSONObject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : FragmentActivity() {
 
     var tvAPIClient: TvAPIClient? = null
-    var serieArray = JSONArray()
+    var favoritySerieArray = JSONArray()
 
     var searchFragment: SearchFragment? = null
     var posterFragment: PosterFragment? = null
     var episodeFragment: EpisodeFragment? = null
     var configFragment: ConfigFragment? = null
+    var favorityFragment: FavorityFragment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +29,7 @@ class MainActivity : AppCompatActivity() {
         posterFragment = PosterFragment(this)
         episodeFragment = EpisodeFragment(this)
         configFragment = ConfigFragment(this)
+        favorityFragment = FavorityFragment(this)
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
@@ -45,7 +47,10 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_favority -> {
-                    println("nav_favority was selected")
+                    supportFragmentManager.commit {
+                        setReorderingAllowed(true)
+                        replace(R.id.fragment_container_view, favorityFragment!!,"Poster Fragment")
+                    }
                     true
                 }
                 R.id.nav_settings -> {

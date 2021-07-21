@@ -31,8 +31,7 @@ class SearchFragment(val callback: MainActivity) : Fragment() {
         var serieArray =  JSONArray()
 
         val recyclerView = rootView.findViewById<RecyclerView>(R.id.recycler_view)
-        val gridLayoutManager = GridLayoutManager(context, 2)
-        recyclerView.layoutManager = gridLayoutManager
+        recyclerView.layoutManager = GridLayoutManager(context, 2)
 
         serieAdapter = SerieAdapter(callback, serieArray)
         recyclerView.adapter = serieAdapter
