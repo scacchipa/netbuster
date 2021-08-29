@@ -22,6 +22,8 @@ class EpisodeFragment(private val callback: MainActivity)
     : Fragment() {
     var jsonObjEpisode: JSONObject? = null
     var serieTitle: String? = null
+
+
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View? {
 

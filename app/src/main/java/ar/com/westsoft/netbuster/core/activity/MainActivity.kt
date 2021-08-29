@@ -3,19 +3,19 @@ package ar.com.westsoft.netbuster.core.activity
 import android.os.Bundle
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
-import androidx.preference.PreferenceManager
 import ar.com.westsoft.netbuster.R
-import ar.com.westsoft.netbuster.core.adapter.SerieAdapter
 import ar.com.westsoft.netbuster.core.client.TvAPIClient
+import ar.com.westsoft.netbuster.core.viewmodel.FavoriteViewModel
+import ar.com.westsoft.netbuster.core.viewmodel.SearchViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import org.json.JSONArray
 import org.json.JSONObject
 
 class MainActivity : FragmentActivity() {
 
     var tvAPIClient: TvAPIClient? = null
-    var favoriteSerieArray = JSONArray()
-    var favoriteSerieAdapter: SerieAdapter? = null
+
+    val searchViewModel = SearchViewModel()
+    val favoriteViewModel = FavoriteViewModel()
 
     var searchFragment: SearchFragment? = null
     var posterFragment: PosterFragment? = null
@@ -70,9 +70,19 @@ class MainActivity : FragmentActivity() {
                 else -> super.onOptionsItemSelected(menuItem)
             }
         }
-        favoriteSerieArray = JSONArray(PreferenceManager.getDefaultSharedPreferences(baseContext)
-            .getString("favoriteSeries", "[]"))
+//        favoriteSerieArray = JSONArray(PreferenceManager.getDefaultSharedPreferences(baseContext)
+//            .getString("favoriteSeries", "[]"))
     }
+//    fun onSearchSerie() {
+//        GlobalScope.launch {
+//            searchFragment.
+//            serieArray = callback.tvAPIClient?.getSyncSerieArrayJsonResponse("girl")?:serieArray
+//            activity?.runOnUiThread {
+//                recyclerView.adapter = SerieAdapter(callback, serieArray, callback.favoriteSerieArray)
+//                recyclerView.invalidate()
+//            }
+//        }
+//    }
     fun showSeriePoster(jsonObject: JSONObject){
         posterFragment?.serieJsonObj = jsonObject
         showSeriePoster()
@@ -91,9 +101,9 @@ class MainActivity : FragmentActivity() {
         }
     }
     fun appendToFavoryArray( serieJsonObj: JSONObject) {
-        favoriteSerieArray.put(serieJsonObj)
+//        favoriteSerieArray.put(serieJsonObj)
     }
     fun removeFromFavoriteArray(favoriteIdPos: Int) {
-        favoriteSerieArray.remove(favoriteIdPos)
+//        favoriteSerieArray.remove(favoriteIdPos)
     }
 }
