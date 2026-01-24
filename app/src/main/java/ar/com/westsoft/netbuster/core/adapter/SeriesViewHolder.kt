@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ar.com.westsoft.netbuster.R
 import com.android.volley.toolbox.NetworkImageView
 
-class SerieViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+class SeriesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     val imageV: NetworkImageView = view.findViewById(R.id.cardview_image)
     val titleV: TextView = view.findViewById(R.id.cardview_text)
     val starIV: ImageView = view.findViewById(R.id.star_view)

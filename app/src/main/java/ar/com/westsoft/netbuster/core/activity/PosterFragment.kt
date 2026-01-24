@@ -149,7 +149,7 @@ class EpisodeElement(private val callback: MainActivity, val serieTitle: String,
                      val number: Int, val jsonObject: JSONObject) {
     fun createView(ctx: Context): View {
         val textView = TextView(ctx)
-        textView.text = ""+ number + " - " + jsonObject.getString("name")
+        textView.text = "$number - ${jsonObject.getString("name")}"
         textView.textSize = 16f
         textView.setOnClickListener { callback.showEpisodeInfo(jsonObject, serieTitle) }
         return textView

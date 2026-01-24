@@ -3,6 +3,7 @@ package ar.com.westsoft.netbuster.splash
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.preference.PreferenceManager
 import ar.com.westsoft.netbuster.R
 import ar.com.westsoft.netbuster.core.activity.MainActivity
@@ -14,7 +15,8 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_view)
-        GlobalScope.launch {
+
+        lifecycleScope.launch {
             delay(3000)
             val sharedPref = PreferenceManager.getDefaultSharedPreferences(baseContext)
 

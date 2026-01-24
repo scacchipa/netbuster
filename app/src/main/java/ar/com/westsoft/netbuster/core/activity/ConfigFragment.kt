@@ -17,7 +17,9 @@ class ConfigFragment(val callback: MainActivity) : Fragment() {
     var repeatPWET: EditText? = null
     var okIV: ImageView? = null
     var saveB: Button? = null
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
         val rootView = inflater.inflate(R.layout.config_layout, container, false)
         val sharedPref = PreferenceManager.getDefaultSharedPreferences(callback.baseContext)
 
@@ -29,14 +31,14 @@ class ConfigFragment(val callback: MainActivity) : Fragment() {
 
         authModeCB?.isChecked = sharedPref?.getBoolean("authMode", false) ?: false
         authModeCB?.setOnCheckedChangeListener { checkButton, _ ->
-            refreshPasswodConsole(checkButton.isChecked)
+            refreshPasswordConsole(checkButton.isChecked)
         }
         passwordET?.addTextChangedListener( textWatcher)
         passwordET?.setText("")
         repeatPWET?.addTextChangedListener( textWatcher )
         repeatPWET?.setText("")
 
-        refreshPasswodConsole(authModeCB?.isChecked == true)
+        refreshPasswordConsole(authModeCB?.isChecked == true)
 
         saveB?.setOnClickListener {
             with(sharedPref?.edit()) {
@@ -62,7 +64,7 @@ class ConfigFragment(val callback: MainActivity) : Fragment() {
     private val textWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        override fun afterTextChanged(s: Editable?) { refreshPasswodConsole(true) }
+        override fun afterTextChanged(s: Editable?) { refreshPasswordConsole(true) }
     }
     override fun onDestroyView() {
         super.onDestroyView()
@@ -73,7 +75,7 @@ class ConfigFragment(val callback: MainActivity) : Fragment() {
         saveB = null
     }
 
-    fun refreshPasswodConsole(checkState: Boolean) {
+    fun refreshPasswordConsole(checkState: Boolean) {
         passwordET?.isEnabled = checkState
         repeatPWET?.isEnabled = checkState
         okIV?.isEnabled = checkState

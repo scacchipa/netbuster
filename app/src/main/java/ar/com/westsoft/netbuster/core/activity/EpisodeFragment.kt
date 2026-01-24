@@ -16,14 +16,18 @@ import ar.com.westsoft.netbuster.core.client.TvAPIClient
 import com.android.volley.toolbox.NetworkImageView
 import org.json.JSONException
 import org.json.JSONObject
+import androidx.core.net.toUri
 
 
 class EpisodeFragment(private val callback: MainActivity)
     : Fragment() {
     var jsonObjEpisode: JSONObject? = null
-    var serieTitle: String? = null
-    override fun onCreateView(inflater: LayoutInflater,
-                              container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    var seriesTitle: String? = null
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
         val rootView = inflater.inflate(R.layout.episode_info, container, false)
         refreshView(rootView)
@@ -32,11 +36,11 @@ class EpisodeFragment(private val callback: MainActivity)
 
     fun setInfo(jsonObjEpisode: JSONObject, serieTitle: String) {
         this.jsonObjEpisode = jsonObjEpisode
-        this.serieTitle = serieTitle
+        this.seriesTitle = serieTitle
     }
     private fun refreshView(rootView: View) {
         if (jsonObjEpisode != null) {
-            val serieTitleTV = rootView.findViewById<TextView>(R.id.serie_title)
+            val seriesTitleTV = rootView.findViewById<TextView>(R.id.serie_title)
             val episodeTitleTV = rootView.findViewById<TextView>(R.id.episode_title)
             val seasonNumberTV = rootView.findViewById<TextView>(R.id.season_number)
             val episodeNumberTV = rootView.findViewById<TextView>(R.id.episode_number)
@@ -45,11 +49,11 @@ class EpisodeFragment(private val callback: MainActivity)
             val backIB = rootView.findViewById<ImageButton>(R.id.back_button)
             val goToPageB = rootView.findViewById<Button>(R.id.go_to_page)
 
-            serieTitleTV?.text = serieTitle
+            seriesTitleTV?.text = seriesTitle
             episodeTitleTV?.text = jsonObjEpisode?.getString("name")
-            seasonNumberTV?.text = "Season: " + jsonObjEpisode?.getInt("season")
+            seasonNumberTV?.text = "Season: ${jsonObjEpisode?.getInt("season")}"
             try {
-                episodeNumberTV?.text = "Episode: " + jsonObjEpisode?.getInt("number")
+                episodeNumberTV?.text = "Episode: ${jsonObjEpisode?.getInt("number")}"
                 episodeIV?.setImageUrl(
                     jsonObjEpisode?.getJSONObject("image")?.getString("medium"),
                     TvAPIClient.instance.imageLoader)
@@ -60,7 +64,7 @@ class EpisodeFragment(private val callback: MainActivity)
                 println(jsonObjEpisode?.getString("url"))
                 val browserIntent = Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse(jsonObjEpisode?.getString("url")))
+                    jsonObjEpisode?.getString("url")?.toUri())
                 startActivity(browserIntent)
             }
         }

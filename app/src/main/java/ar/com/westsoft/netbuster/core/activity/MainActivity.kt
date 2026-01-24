@@ -5,7 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
 import androidx.preference.PreferenceManager
 import ar.com.westsoft.netbuster.R
-import ar.com.westsoft.netbuster.core.adapter.SerieAdapter
+import ar.com.westsoft.netbuster.core.adapter.SeriesAdapter
 import ar.com.westsoft.netbuster.core.client.TvAPIClient
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.json.JSONArray
@@ -15,7 +15,7 @@ class MainActivity : FragmentActivity() {
 
     var tvAPIClient: TvAPIClient? = null
     var favoriteSerieArray = JSONArray()
-    var favoriteSerieAdapter: SerieAdapter? = null
+    var favoriteSeriesAdapter: SeriesAdapter? = null
 
     var searchFragment: SearchFragment? = null
     var posterFragment: PosterFragment? = null
@@ -47,7 +47,7 @@ class MainActivity : FragmentActivity() {
                     supportFragmentManager.commit {
                         setReorderingAllowed(true)
                         if (!searchFragment!!.isVisible)
-                            replace(R.id.fragment_container_view, searchFragment!!,"Poster Fragment")
+                            replace(R.id.fragment_container_view, searchFragment!!, "Poster Fragment")
                     }
                     true
                 }

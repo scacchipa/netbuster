@@ -10,17 +10,17 @@ import ar.com.westsoft.netbuster.core.activity.MainActivity
 import org.json.JSONArray
 import org.json.JSONException
 
-class SerieAdapter(private val callback: MainActivity, val serieArray: JSONArray,
-                   val favoriteArray: JSONArray): RecyclerView.Adapter<SerieViewHolder>() {
+class SeriesAdapter(private val callback: MainActivity, val serieArray: JSONArray,
+                    val favoriteArray: JSONArray): RecyclerView.Adapter<SeriesViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SerieViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SeriesViewHolder {
         val cardView = LayoutInflater
             .from(parent.context)
             .inflate(R.layout.recyclerview_row_item, parent, false)
-        return SerieViewHolder(cardView)
+        return SeriesViewHolder(cardView)
     }
 
-    override fun onBindViewHolder(holder: SerieViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SeriesViewHolder, position: Int) {
         val showJsonObj = serieArray.getJSONObject(position).getJSONObject("show")
         holder.imageV.setDefaultImageResId(android.R.drawable.ic_menu_gallery)
         try {
@@ -43,11 +43,11 @@ class SerieAdapter(private val callback: MainActivity, val serieArray: JSONArray
             val favoriteIdPos: Int? = favoriteArrayContainsId(id)
             if (favoriteIdPos == null) {
                 callback.appendToFavoryArray(serieArray.getJSONObject(position))
-                callback.favoriteSerieAdapter?.notifyItemInserted(position)
+                callback.favoriteSeriesAdapter?.notifyItemInserted(position)
             }
             else {
                 callback.removeFromFavoriteArray(favoriteIdPos)
-                callback.favoriteSerieAdapter?.notifyItemRemoved(favoriteIdPos)
+                callback.favoriteSeriesAdapter?.notifyItemRemoved(favoriteIdPos)
             }
             updateStarIV(holder, id)
 
@@ -67,7 +67,7 @@ class SerieAdapter(private val callback: MainActivity, val serieArray: JSONArray
                 return idx
         return null
     }
-    private fun updateStarIV(holder: SerieViewHolder, id: Int) {
+    private fun updateStarIV(holder: SeriesViewHolder, id: Int) {
         if (favoriteArrayContainsId(id) != null)
             holder.starIV.setImageResource(android.R.drawable.btn_star_big_on)
         else
