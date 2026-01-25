@@ -14,7 +14,7 @@ import org.json.JSONObject
 class MainActivity : FragmentActivity() {
 
     var tvAPIClient: TvAPIClient? = null
-    var favoriteSerieArray = JSONArray()
+    var favoriteSeriesArray = JSONArray()
     var favoriteSeriesAdapter: SeriesAdapter? = null
 
     var searchFragment: SearchFragment? = null
@@ -28,7 +28,7 @@ class MainActivity : FragmentActivity() {
         setContentView(R.layout.activity_main)
         tvAPIClient = TvAPIClient(this)
 
-        val bottonNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         searchFragment = SearchFragment(this)
         posterFragment = PosterFragment(this)
         episodeFragment = EpisodeFragment(this)
@@ -41,7 +41,7 @@ class MainActivity : FragmentActivity() {
             }
         }
 
-        bottonNav.setOnNavigationItemSelectedListener { menuItem ->
+        bottomNav.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.nav_home -> {
                     supportFragmentManager.commit {
@@ -70,14 +70,14 @@ class MainActivity : FragmentActivity() {
                 else -> super.onOptionsItemSelected(menuItem)
             }
         }
-        favoriteSerieArray = JSONArray(PreferenceManager.getDefaultSharedPreferences(baseContext)
+        favoriteSeriesArray = JSONArray(PreferenceManager.getDefaultSharedPreferences(baseContext)
             .getString("favoriteSeries", "[]"))
     }
-    fun showSeriePoster(jsonObject: JSONObject){
-        posterFragment?.serieJsonObj = jsonObject
-        showSeriePoster()
+    fun showSeriesPoster(jsonObject: JSONObject){
+        posterFragment?.seriesJsonObj = jsonObject
+        showSeriesPoster()
     }
-    fun showSeriePoster(){
+    fun showSeriesPoster(){
         supportFragmentManager.commit {
             setReorderingAllowed(true)
             replace(R.id.fragment_container_view, posterFragment!!,"Poster Fragment")
@@ -90,10 +90,10 @@ class MainActivity : FragmentActivity() {
             replace(R.id.fragment_container_view, episodeFragment!!)
         }
     }
-    fun appendToFavoryArray( serieJsonObj: JSONObject) {
-        favoriteSerieArray.put(serieJsonObj)
+    fun appendToFavoriteArray(seriesJsonObj: JSONObject) {
+        favoriteSeriesArray.put(seriesJsonObj)
     }
     fun removeFromFavoriteArray(favoriteIdPos: Int) {
-        favoriteSerieArray.remove(favoriteIdPos)
+        favoriteSeriesArray.remove(favoriteIdPos)
     }
 }

@@ -5,47 +5,44 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import ar.com.westsoft.netbuster.R
-import ar.com.westsoft.netbuster.core.ui.ExpandableEpisodesList
-import ar.com.westsoft.netbuster.core.ExpandableSeasonList
+import ar.com.westsoft.netbuster.core.ui.ExpandableSeasonList
 import ar.com.westsoft.netbuster.core.client.TvAPIClient
-import com.android.volley.toolbox.NetworkImageView
-import kotlinx.coroutines.GlobalScope
+import ar.com.westsoft.netbuster.core.ui.ExpandableEpisodesList
+import ar.com.westsoft.netbuster.databinding.FragmentPosterBinding
 import kotlinx.coroutines.launch
 import org.json.JSONException
 import org.json.JSONObject
 
 class PosterFragment(val callback: MainActivity) : Fragment() {
-    var serieJsonObj: JSONObject? = null
+
+    private val binding: FragmentPosterBinding by lazy {
+        FragmentPosterBinding.inflate(layoutInflater)
+    }
+
+    var seriesJsonObj: JSONObject? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.fragment_poster, container, false)
-        refreshView(rootView)
+        val rootView = binding.root
+        refreshView()
         return rootView
     }
-    private fun refreshView(view: View) {
-        if (serieJsonObj != null) {
-            val posterImage: NetworkImageView = view.findViewById(R.id.poster_image)
-            val name: TextView = view.findViewById(R.id.name)
-            val schedule: TextView = view.findViewById(R.id.schedule)
-            val gender: TextView = view.findViewById(R.id.gender)
-            val episodesView: ExpandableSeasonList = view.findViewById(R.id.episodeDisplay)
-            val summary: WebView = view.findViewById(R.id.summary)
-
-            posterImage.setDefaultImageResId(android.R.drawable.ic_menu_gallery)
+    private fun refreshView() {
+        if (seriesJsonObj != null) {
+            binding.posterImage.setDefaultImageResId(android.R.drawable.ic_menu_gallery)
             try {
-                posterImage.setImageUrl(
-                    serieJsonObj!!.getJSONObject("image").getString("original"),
+                binding.posterImage.setImageUrl(
+                    seriesJsonObj!!.getJSONObject("image").getString("original"),
                     TvAPIClient.instance.imageLoader
                 )
             } catch (e: JSONException) { e.printStackTrace() }
-            name.text = serieJsonObj!!.getString("name")
+            binding.name.text = seriesJsonObj?.getString("name") ?: ""
 
-            val scheduleObj = serieJsonObj!!.getJSONObject("schedule")
+            val scheduleObj = seriesJsonObj?.getJSONObject("schedule") ?: JSONObject()
             var scheduleText = scheduleObj.getString("time")
             val daysObjs = scheduleObj.getJSONArray("days")
             if (daysObjs.length() > 0) {
@@ -56,23 +53,27 @@ class PosterFragment(val callback: MainActivity) : Fragment() {
                 }
                 scheduleText += ")"
             }
-            schedule.text = scheduleText
+            binding.schedule.text = scheduleText
 
-            val genresArray = serieJsonObj!!.getJSONArray("genres")
+            val genresArray = seriesJsonObj!!.getJSONArray("genres")
             var genresText = ""
             for (idx in 0 until genresArray.length()) genresText += " " + genresArray.getString(idx)
-            gender.text = genresText
+            binding.gender.text = genresText
 
             try {
-                summary.loadData(serieJsonObj!!.getString("summary"), "text/html", "UTF_8")
+                binding.summary.loadData(seriesJsonObj!!.getString("summary"), "text/html", "UTF_8")
             } catch (e: JSONException) { e.printStackTrace() }
 
-            setEpisodes(serieJsonObj!!.getInt("id"), serieJsonObj!!.getString("name"), episodesView)
+            setEpisodes(
+                id = seriesJsonObj?.getInt("id") ?: -1,
+                serieTitle = seriesJsonObj?.getString("name") ?: "",
+                episodesView = binding.episodeDisplay
+            )
         }
     }
 
     private fun setEpisodes(id: Int, serieTitle: String, episodesView: ExpandableSeasonList) {
-        GlobalScope.launch {
+        lifecycleScope.launch {
             val episodesJSONArray = callback.tvAPIClient!!.getSyncEpisodeArrayJsonResponse(id)
 
             val epiTree = SeasonTree()

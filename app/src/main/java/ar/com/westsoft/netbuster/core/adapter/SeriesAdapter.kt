@@ -5,13 +5,16 @@ import android.view.ViewGroup
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import ar.com.westsoft.netbuster.R
-import ar.com.westsoft.netbuster.core.client.TvAPIClient
 import ar.com.westsoft.netbuster.core.activity.MainActivity
+import ar.com.westsoft.netbuster.core.client.TvAPIClient
 import org.json.JSONArray
 import org.json.JSONException
 
-class SeriesAdapter(private val callback: MainActivity, val serieArray: JSONArray,
-                    val favoriteArray: JSONArray): RecyclerView.Adapter<SeriesViewHolder>() {
+class SeriesAdapter(
+    private val callback: MainActivity,
+    val seriesArray: JSONArray,
+    val favoriteArray: JSONArray
+): RecyclerView.Adapter<SeriesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SeriesViewHolder {
         val cardView = LayoutInflater
@@ -21,7 +24,7 @@ class SeriesAdapter(private val callback: MainActivity, val serieArray: JSONArra
     }
 
     override fun onBindViewHolder(holder: SeriesViewHolder, position: Int) {
-        val showJsonObj = serieArray.getJSONObject(position).getJSONObject("show")
+        val showJsonObj = seriesArray.getJSONObject(position).getJSONObject("show")
         holder.imageV.setDefaultImageResId(android.R.drawable.ic_menu_gallery)
         try {
             holder.imageV.setImageUrl(
@@ -31,7 +34,7 @@ class SeriesAdapter(private val callback: MainActivity, val serieArray: JSONArra
         } catch (e: JSONException) {
             e.printStackTrace()
         }
-        holder.imageV.setOnClickListener { callback.showSeriePoster(showJsonObj) }
+        holder.imageV.setOnClickListener { callback.showSeriesPoster(showJsonObj) }
 
         holder.titleV.text = showJsonObj.getString("name")
 
@@ -42,7 +45,7 @@ class SeriesAdapter(private val callback: MainActivity, val serieArray: JSONArra
         holder.starIV.setOnClickListener {
             val favoriteIdPos: Int? = favoriteArrayContainsId(id)
             if (favoriteIdPos == null) {
-                callback.appendToFavoryArray(serieArray.getJSONObject(position))
+                callback.appendToFavoriteArray(seriesArray.getJSONObject(position))
                 callback.favoriteSeriesAdapter?.notifyItemInserted(position)
             }
             else {
@@ -52,14 +55,14 @@ class SeriesAdapter(private val callback: MainActivity, val serieArray: JSONArra
             updateStarIV(holder, id)
 
             with(PreferenceManager.getDefaultSharedPreferences(callback.baseContext).edit()) {
-                this?.putString("favoriteSeries", callback.favoriteSerieArray.toString())
+                this?.putString("favoriteSeries", callback.favoriteSeriesArray.toString())
                 this?.apply()
             }
         }
     }
 
     override fun getItemCount(): Int {
-        return serieArray.length()
+        return seriesArray.length()
     }
     private fun favoriteArrayContainsId(favoriteId: Int) : Int? {
         for (idx in 0 until favoriteArray.length())

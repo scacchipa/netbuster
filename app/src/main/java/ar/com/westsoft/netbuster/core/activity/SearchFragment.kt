@@ -20,6 +20,10 @@ import org.json.JSONArray
 
 class SearchFragment(private val callback: MainActivity) : Fragment() {
 
+    companion object {
+        const val tag = "Poster Fragment"
+    }
+
     var seriesAdapter: SeriesAdapter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -31,14 +35,14 @@ class SearchFragment(private val callback: MainActivity) : Fragment() {
         val recyclerView = rootView.findViewById<RecyclerView>(R.id.recycler_view)
         recyclerView.layoutManager = GridLayoutManager(context, 2)
 
-        seriesAdapter = SeriesAdapter(callback, serieArray, callback.favoriteSerieArray)
+        seriesAdapter = SeriesAdapter(callback, serieArray, callback.favoriteSeriesArray)
         recyclerView.adapter = seriesAdapter
         recyclerView.invalidate()
 
         lifecycleScope.launch {
             serieArray = callback.tvAPIClient?.getSyncSerieArrayJsonResponse("girl")?:serieArray
             activity?.runOnUiThread {
-                recyclerView.adapter = SeriesAdapter(callback, serieArray, callback.favoriteSerieArray)
+                recyclerView.adapter = SeriesAdapter(callback, serieArray, callback.favoriteSeriesArray)
                 recyclerView.invalidate()
             }
         }
@@ -54,7 +58,7 @@ class SearchFragment(private val callback: MainActivity) : Fragment() {
                         getSyncSerieArrayJsonResponse(searchField.text.toString())?:serieArray
                 activity?.runOnUiThread {
                     recyclerView.adapter = SeriesAdapter(
-                        callback, serieArray, callback.favoriteSerieArray
+                        callback, serieArray, callback.favoriteSeriesArray
                     )
                     recyclerView.invalidate()
 

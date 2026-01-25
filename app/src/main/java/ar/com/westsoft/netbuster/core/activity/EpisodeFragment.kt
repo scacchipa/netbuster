@@ -1,66 +1,51 @@
 package ar.com.westsoft.netbuster.core.activity
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebView
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TextView
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import ar.com.westsoft.netbuster.R
 import ar.com.westsoft.netbuster.core.client.TvAPIClient
-import com.android.volley.toolbox.NetworkImageView
+import ar.com.westsoft.netbuster.databinding.EpisodeInfoBinding
 import org.json.JSONException
 import org.json.JSONObject
-import androidx.core.net.toUri
 
 
-class EpisodeFragment(private val callback: MainActivity)
-    : Fragment() {
+class EpisodeFragment(private val callback: MainActivity) : Fragment() {
     var jsonObjEpisode: JSONObject? = null
-    var seriesTitle: String? = null
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    var seriesTitle: String = ""
 
-        val rootView = inflater.inflate(R.layout.episode_info, container, false)
-        refreshView(rootView)
-        return rootView
+    private val binding: EpisodeInfoBinding by lazy {
+        EpisodeInfoBinding.inflate(layoutInflater)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View? {
+        refreshView()
+        return binding.root
     }
 
     fun setInfo(jsonObjEpisode: JSONObject, serieTitle: String) {
         this.jsonObjEpisode = jsonObjEpisode
         this.seriesTitle = serieTitle
     }
-    private fun refreshView(rootView: View) {
+    private fun refreshView() {
         if (jsonObjEpisode != null) {
-            val seriesTitleTV = rootView.findViewById<TextView>(R.id.serie_title)
-            val episodeTitleTV = rootView.findViewById<TextView>(R.id.episode_title)
-            val seasonNumberTV = rootView.findViewById<TextView>(R.id.season_number)
-            val episodeNumberTV = rootView.findViewById<TextView>(R.id.episode_number)
-            val episodeIV = rootView.findViewById<NetworkImageView>(R.id.episode_image)
-            val summaryWV = rootView.findViewById<WebView>(R.id.summary_view)
-            val backIB = rootView.findViewById<ImageButton>(R.id.back_button)
-            val goToPageB = rootView.findViewById<Button>(R.id.go_to_page)
-
-            seriesTitleTV?.text = seriesTitle
-            episodeTitleTV?.text = jsonObjEpisode?.getString("name")
-            seasonNumberTV?.text = "Season: ${jsonObjEpisode?.getInt("season")}"
+            binding.serieTitle.text = seriesTitle
+            binding.episodeTitle.text = jsonObjEpisode?.getString("name")
+            binding.seasonNumber.text = "Season: ${jsonObjEpisode?.getInt("season")}"
             try {
-                episodeNumberTV?.text = "Episode: ${jsonObjEpisode?.getInt("number")}"
-                episodeIV?.setImageUrl(
+                binding.episodeNumber.text = "Episode: ${jsonObjEpisode?.getInt("number")}"
+                binding.episodeImage.setImageUrl(
                     jsonObjEpisode?.getJSONObject("image")?.getString("medium"),
                     TvAPIClient.instance.imageLoader)
             } catch (e : JSONException) { e.printStackTrace() }
-            summaryWV?.loadData(jsonObjEpisode?.getString("summary"), "text/html", "UTF-8")
-            backIB?.setOnClickListener { callback.showSeriePoster() }
-            goToPageB?.setOnClickListener {
+            binding.summaryView.loadData(jsonObjEpisode?.getString("summary") ?: "", "text/html", "UTF-8")
+            binding.backButton.setOnClickListener { callback.showSeriesPoster() }
+            binding.goToPage.setOnClickListener {
                 println(jsonObjEpisode?.getString("url"))
                 val browserIntent = Intent(
                     Intent.ACTION_VIEW,

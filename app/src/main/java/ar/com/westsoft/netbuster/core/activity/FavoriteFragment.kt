@@ -9,23 +9,28 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ar.com.westsoft.netbuster.R
 import ar.com.westsoft.netbuster.core.adapter.SeriesAdapter
+import ar.com.westsoft.netbuster.databinding.FavoriteLayoutBinding
 
 class FavoriteFragment(private val callback: MainActivity) : Fragment() {
+
+    private val binding: FavoriteLayoutBinding by lazy {
+        FavoriteLayoutBinding.inflate(layoutInflater)
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.favorite_layout, container, false)
 
-        val recyclerView = rootView.findViewById<RecyclerView>(R.id.favorite_recycler_view)
+        val recyclerView = binding.root.findViewById<RecyclerView>(R.id.favorite_recycler_view)
         recyclerView.layoutManager = GridLayoutManager(context, 2)
 
         callback.favoriteSeriesAdapter = SeriesAdapter(
-            callback, callback.favoriteSerieArray, callback.favoriteSerieArray
+            callback, callback.favoriteSeriesArray, callback.favoriteSeriesArray
         )
         recyclerView.adapter = callback.favoriteSeriesAdapter
         recyclerView.invalidate()
 
-        return rootView
+        return binding.root
     }
 }
 

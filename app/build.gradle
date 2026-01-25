@@ -4,13 +4,12 @@ plugins {
 }
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 36
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "ar.com.westsoft.netbuster"
         minSdkVersion 24
-        targetSdkVersion 29
         versionCode 1
         versionName "1.0"
 
@@ -29,6 +28,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
     }
     namespace 'ar.com.westsoft.netbuster'
 }
