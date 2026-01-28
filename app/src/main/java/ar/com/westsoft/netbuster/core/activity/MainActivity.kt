@@ -26,6 +26,7 @@ class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         tvAPIClient = TvAPIClient(this)
 
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
@@ -83,8 +84,8 @@ class MainActivity : FragmentActivity() {
             replace(R.id.fragment_container_view, posterFragment!!,"Poster Fragment")
         }
     }
-    fun showEpisodeInfo(jsonObject: JSONObject, serieTitle: String) {
-        episodeFragment?.setInfo(jsonObject, serieTitle)
+    fun showEpisodeInfo(jsonObject: JSONObject, seriesTitle: String) {
+        episodeFragment?.setInfo(jsonObject, seriesTitle)
         supportFragmentManager. commit {
             setReorderingAllowed(true)
             replace(R.id.fragment_container_view, episodeFragment!!)

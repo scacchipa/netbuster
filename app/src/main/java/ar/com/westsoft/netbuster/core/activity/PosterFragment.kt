@@ -9,6 +9,7 @@ import androidx.compose.runtime.produceState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import ar.com.westsoft.netbuster.core.client.TvAPIClient
+import ar.com.westsoft.netbuster.core.ext.findOrNull
 import ar.com.westsoft.netbuster.core.ext.joinToString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,6 +48,16 @@ class PosterFragment(val callback: MainActivity) : Fragment() {
                     genderText = seriesJsonObj?.getJSONArray("genres")?.joinToString(" "),
                     summaryHtml = seriesJsonObj?.getString("summary") ?: "",
                     seasonTree = seasonTree ?: SeasonTree(""),
+                    onEpisodeClick = { seasonId, episodeId ->
+                        callback.showEpisodeInfo(
+                            jsonObject = seasonTree
+                                ?.jsonArray?.findOrNull {
+                                    it.getInt("season") == seasonId && it.getInt("number") == episodeId
+                                }
+                                ?: JSONObject(),
+                            seriesTitle = seriesJsonObj?.getString("name") ?: "",
+                        )
+                    }
                 )
             }
         }

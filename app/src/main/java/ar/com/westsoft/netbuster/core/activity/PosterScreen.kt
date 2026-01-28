@@ -2,6 +2,7 @@ package ar.com.westsoft.netbuster.core.activity
 
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
@@ -32,6 +33,7 @@ fun PosterScreen(
     genderText: String?,
     summaryHtml: String,
     seasonTree: SeasonTree,
+    onEpisodeClick: (seasonId: Int, episodeId: Int) -> Unit,
 ) {
     val scrollState = rememberScrollState()
     Column(
@@ -42,8 +44,6 @@ fun PosterScreen(
         AndroidView(
             factory = { context ->
                 NetworkImageView(context).apply {
-
-
                     this.setDefaultImageResId(android.R.drawable.ic_menu_gallery)
                 }
             },
@@ -85,13 +85,18 @@ fun PosterScreen(
                 ExpandableEpisodeListWidget(
                     title = "Season $seasonId"
                 ) {
-                    seasonElement.episodesMap.forEach { (_, episodeElement) ->
+                    seasonElement.episodesMap.forEach { (_, episode) ->
                         Text(
-                            text = (episodeElement.seasonId + 1).toString().padStart(2, '0') + "x" +
-                                (episodeElement.episodeId + 1).toString().padStart(2, '0') + " - " +
-                                episodeElement.name,
+                            text = (episode.seasonId + 1).toString().padStart(2, '0') + "x" +
+                                    (episode.episodeId + 1).toString().padStart(2, '0') + " - " +
+                                    episode.name,
                             fontSize = 18.sp,
-                            modifier = Modifier.padding(start = 48.dp)
+                            modifier = Modifier
+                                .padding(start = 48.dp, top = 8.dp, bottom = 8.dp)
+                                .clickable(
+                                    onClick = {
+                                        onEpisodeClick(episode.seasonId, episode.episodeId)
+                                    }),
                         )
                     }
                 }

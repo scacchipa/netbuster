@@ -20,6 +20,14 @@ fun JSONArray.joinToString(
     return builder.toString()
 }
 
+fun JSONArray.findOrNull(predicate: (JSONObject) -> Boolean) : JSONObject? {
+    for (idx in 0 until this.length()) {
+        val value = this[idx]
+        if (value is JSONObject && predicate(value)) return value
+    }
+    return null
+}
+
 fun JSONArray.toList(): List<Any> = buildList { // Use buildList for efficiency
     for (i in 0 until length()) {
         val value = get(i)
