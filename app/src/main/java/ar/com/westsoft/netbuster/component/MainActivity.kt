@@ -6,17 +6,19 @@ import androidx.fragment.app.commit
 import androidx.preference.PreferenceManager
 import ar.com.westsoft.netbuster.R
 import ar.com.westsoft.netbuster.data.source.TvAPIClient
-import ar.com.westsoft.netbuster.ext.map
 import ar.com.westsoft.netbuster.data.type.Series
+import ar.com.westsoft.netbuster.ext.map
 import ar.com.westsoft.netbuster.fragment.ConfigFragment
 import ar.com.westsoft.netbuster.fragment.EpisodeFragment
 import ar.com.westsoft.netbuster.fragment.FavoriteFragment
 import ar.com.westsoft.netbuster.fragment.PosterFragment
 import ar.com.westsoft.netbuster.fragment.SearchFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONArray
 import org.json.JSONObject
 
+@AndroidEntryPoint
 class MainActivity : FragmentActivity() {
 
     var tvAPIClient: TvAPIClient? = null

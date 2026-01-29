@@ -10,14 +10,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import ar.com.westsoft.netbuster.data.type.Series
-import ar.com.westsoft.netbuster.data.source.TvAPIClient
 import ar.com.westsoft.netbuster.ui.widget.SeriesCard
+import com.android.volley.toolbox.ImageLoader
 
 @Composable
 fun FavoriteScreen(
     seriesList: List<Series>,
     onSeriesTapped: (Series) -> Unit,
     onFavoriteTapped: (Series) -> Unit,
+    imageLoader: ImageLoader
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -31,7 +32,7 @@ fun FavoriteScreen(
             SeriesCard(
                 title = series.title,
                 imageUrl = series.imageUrl,
-                imageLoader = TvAPIClient.instance.imageLoader,
+                imageLoader = imageLoader,
                 isFavorite = true,
                 onCardClick = { onSeriesTapped(series) },
                 onFavoriteClick = { onFavoriteTapped(series) },

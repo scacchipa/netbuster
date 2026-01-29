@@ -12,9 +12,10 @@ import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.preference.PreferenceManager
 import ar.com.westsoft.netbuster.R
-import ar.com.westsoft.netbuster.component.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.Executor
 
+@AndroidEntryPoint
 class CheckingActivity : AppCompatActivity() {
     private lateinit var executor: Executor
     private lateinit var biometricPrompt: BiometricPrompt

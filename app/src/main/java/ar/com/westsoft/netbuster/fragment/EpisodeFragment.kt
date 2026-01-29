@@ -8,18 +8,20 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
-import ar.com.westsoft.netbuster.ui.screen.EpisodeDetailScreen
-import ar.com.westsoft.netbuster.data.source.TvAPIClient
 import ar.com.westsoft.netbuster.component.MainActivity
+import ar.com.westsoft.netbuster.data.source.TvAPIClient
+import ar.com.westsoft.netbuster.ui.screen.EpisodeDetailScreen
+import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class EpisodeFragment(private val callback: MainActivity) : Fragment() {
     var jsonObjEpisode: JSONObject? = null
     var seriesTitle: String = ""
 
-//    private val binding: EpisodeInfoBinding by lazy {
-//        EpisodeInfoBinding.inflate(layoutInflater)
-//    }
+    @Inject lateinit var tvAPIClient: TvAPIClient
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -32,7 +34,7 @@ class EpisodeFragment(private val callback: MainActivity) : Fragment() {
                     seasonNumber = "Season: ${jsonObjEpisode?.optInt("season")}",
                     episodeNumber = "Episode: ${jsonObjEpisode?.optInt("number")}",
                     imageUrl = jsonObjEpisode?.getJSONObject("image")?.optString("medium"),
-                    imageLoader = TvAPIClient.Companion.instance.imageLoader,
+                    imageLoader = tvAPIClient.imageLoader,
                     summaryHtml = jsonObjEpisode?.optString("summary") ?: "",
                     onBackClick = { callback.showSeriesPoster() },
                     onGoToPageClick = {

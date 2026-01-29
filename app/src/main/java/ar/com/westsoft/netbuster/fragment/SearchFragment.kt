@@ -11,18 +11,23 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import ar.com.westsoft.netbuster.data.type.Series
 import ar.com.westsoft.netbuster.component.MainActivity
+import ar.com.westsoft.netbuster.data.source.TvAPIClient
+import ar.com.westsoft.netbuster.data.type.Series
 import ar.com.westsoft.netbuster.ext.map
 import ar.com.westsoft.netbuster.ui.screen.SearchScreen
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class SearchFragment(private val callback: MainActivity) : Fragment() {
 
     companion object {
         const val tag = "Poster Fragment"
     }
 
+    @Inject lateinit var tvAPIClient: TvAPIClient
     var seriesList by mutableStateOf(emptyList<Series>())
 
     override fun onCreateView(
@@ -61,7 +66,8 @@ class SearchFragment(private val callback: MainActivity) : Fragment() {
                         }
                     },
                     onSeriesTapped = { callback.showSeriesPoster(it) },
-                    seriesList = seriesList
+                    seriesList = seriesList,
+                    imageLoader = tvAPIClient.imageLoader
                 )
             }
         }

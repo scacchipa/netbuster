@@ -14,11 +14,16 @@ import ar.com.westsoft.netbuster.data.type.SeasonTree
 import ar.com.westsoft.netbuster.data.type.Series
 import ar.com.westsoft.netbuster.ext.findOrNull
 import ar.com.westsoft.netbuster.ui.screen.PosterScreen
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class PosterFragment(val callback: MainActivity) : Fragment() {
+
+    @Inject lateinit var tvAPIClient: TvAPIClient
 
     var series: Series? = null
     override fun onCreateView(
@@ -49,7 +54,7 @@ class PosterFragment(val callback: MainActivity) : Fragment() {
 
                 PosterScreen(
                     imageUrl = series?.imageUrl ?: "",
-                    imageLoader = TvAPIClient.Companion.instance.imageLoader,
+                    imageLoader = tvAPIClient.imageLoader,
                     nameText = series?.title ?: "",
                     scheduleText = scheduleText,
                     genderText = series?.genres?.joinToString(" "),

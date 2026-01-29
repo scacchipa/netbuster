@@ -22,8 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import ar.com.westsoft.netbuster.data.type.Series
-import ar.com.westsoft.netbuster.data.source.TvAPIClient
 import ar.com.westsoft.netbuster.ui.widget.SeriesCard
+import com.android.volley.toolbox.ImageLoader
 
 @Composable
 fun SearchScreen(
@@ -33,7 +33,8 @@ fun SearchScreen(
     onSeriesTapped: (Series) -> Unit,
     onClearTapped: () -> Unit,
     onSearchTapped: () -> Unit,
-    seriesList: List<Series> // Tu modelo de datos
+    seriesList: List<Series>,
+    imageLoader: ImageLoader,
 ) {
     Column(
         modifier = Modifier
@@ -90,7 +91,7 @@ fun SearchScreen(
                 SeriesCard(
                     title = series.title,
                     imageUrl = series.imageUrl,
-                    imageLoader = TvAPIClient.instance.imageLoader,
+                    imageLoader = imageLoader,
                     isFavorite = series.isFavorite,
                     onCardClick = { onSeriesTapped(series) },
                     onFavoriteClick = { onFavoriteTapped(series) },

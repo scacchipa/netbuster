@@ -9,9 +9,11 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
-import ar.com.westsoft.netbuster.ui.screen.ConfigScreen
 import ar.com.westsoft.netbuster.component.MainActivity
+import ar.com.westsoft.netbuster.ui.screen.ConfigScreen
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ConfigFragment(val callback: MainActivity) : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

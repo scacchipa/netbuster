@@ -10,19 +10,18 @@ import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import dagger.hilt.android.qualifiers.ApplicationContext
 import org.json.JSONArray
 import org.json.JSONObject
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class TvAPIClient(val context: Context) {
-    companion object {
-        lateinit var instance: TvAPIClient
-    }
-    init {
-        instance = this
-    }
+class TvAPIClient @Inject constructor(
+    @param:ApplicationContext val context: Context
+) {
+
     val url: String = "https://api.tvmaze.com"
     var queue: RequestQueue = Volley.newRequestQueue(context)
     var imageLoader = ImageLoader(queue, object : ImageLoader.ImageCache {

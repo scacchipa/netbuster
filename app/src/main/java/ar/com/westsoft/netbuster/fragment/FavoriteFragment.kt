@@ -11,11 +11,16 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import ar.com.westsoft.netbuster.component.MainActivity
+import ar.com.westsoft.netbuster.data.source.TvAPIClient
 import ar.com.westsoft.netbuster.ui.screen.FavoriteScreen
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class FavoriteFragment(private val callback: MainActivity) : Fragment() {
 
+    @Inject lateinit var tvAPIClient: TvAPIClient
     var favoriteSeriesListState by mutableStateOf(callback.favoriteSeriesList)
 
     override fun onCreateView(
@@ -31,6 +36,7 @@ class FavoriteFragment(private val callback: MainActivity) : Fragment() {
                         }
                     },
                     onSeriesTapped = { callback.showSeriesPoster(it) },
+                    imageLoader = tvAPIClient.imageLoader
                 )
             }
         }
