@@ -28,6 +28,15 @@ fun JSONArray.findOrNull(predicate: (JSONObject) -> Boolean) : JSONObject? {
     return null
 }
 
+fun <T>JSONArray.map(transform: (JSONObject) -> T?): List<T> {
+    val list = mutableListOf<T>()
+    for (idx in 0 until this.length()) {
+        val transformed = transform(this.getJSONObject(idx)) ?: continue
+        list.add(transformed)
+    }
+    return list
+}
+
 fun JSONArray.toList(): List<Any> = buildList { // Use buildList for efficiency
     for (i in 0 until length()) {
         val value = get(i)
@@ -37,4 +46,8 @@ fun JSONArray.toList(): List<Any> = buildList { // Use buildList for efficiency
             else -> add(value)
         }
     }
+}
+
+fun JSONArray.toStringList(): List<String> {
+    return List(this.length()) { i -> this.getString(i) }
 }

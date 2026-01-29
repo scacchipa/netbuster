@@ -6,14 +6,14 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.RecyclerView
 import ar.com.westsoft.netbuster.R
 import ar.com.westsoft.netbuster.core.activity.MainActivity
+import ar.com.westsoft.netbuster.core.activity.Series
 import ar.com.westsoft.netbuster.core.client.TvAPIClient
-import org.json.JSONArray
 import org.json.JSONException
 
 class SeriesAdapter(
     private val callback: MainActivity,
-    val seriesArray: JSONArray,
-    val favoriteArray: JSONArray
+    val seriesList: List<Series>,
+    val favoriteArray: List<Series>,
 ): RecyclerView.Adapter<SeriesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SeriesViewHolder {
@@ -24,49 +24,49 @@ class SeriesAdapter(
     }
 
     override fun onBindViewHolder(holder: SeriesViewHolder, position: Int) {
-        val showJsonObj = seriesArray.getJSONObject(position).getJSONObject("show")
+        val showSeriesObj = seriesList[position]
         holder.imageV.setDefaultImageResId(android.R.drawable.ic_menu_gallery)
         try {
             holder.imageV.setImageUrl(
-                showJsonObj.getJSONObject("image").getString("medium"),
+                showSeriesObj.imageUrl,
                 TvAPIClient.instance.imageLoader
             )
         } catch (e: JSONException) {
             e.printStackTrace()
         }
-        holder.imageV.setOnClickListener { callback.showSeriesPoster(showJsonObj) }
+        holder.imageV.setOnClickListener { callback.showSeriesPoster(showSeriesObj) }
 
-        holder.titleV.text = showJsonObj.getString("name")
+        holder.titleV.text = showSeriesObj.title
 
-        val id = showJsonObj.getInt("id")
+        val id = showSeriesObj.id
 
         updateStarIV(holder, id)
 
         holder.starIV.setOnClickListener {
             val favoriteIdPos: Int? = favoriteArrayContainsId(id)
             if (favoriteIdPos == null) {
-                callback.appendToFavoriteArray(seriesArray.getJSONObject(position))
+                callback.appendToFavoriteArray(seriesList[position])
                 callback.favoriteSeriesAdapter?.notifyItemInserted(position)
             }
             else {
-                callback.removeFromFavoriteArray(favoriteIdPos)
+                callback.removeFromFavoriteArray(seriesList[position])
                 callback.favoriteSeriesAdapter?.notifyItemRemoved(favoriteIdPos)
             }
             updateStarIV(holder, id)
 
             with(PreferenceManager.getDefaultSharedPreferences(callback.baseContext).edit()) {
-                this?.putString("favoriteSeries", callback.favoriteSeriesArray.toString())
+                this?.putString("favoriteSeries", callback.favoriteSeriesList.map{it.toJSONObject()}.toString())
                 this?.apply()
             }
         }
     }
 
     override fun getItemCount(): Int {
-        return seriesArray.length()
+        return seriesList.size
     }
     private fun favoriteArrayContainsId(favoriteId: Int) : Int? {
-        for (idx in 0 until favoriteArray.length())
-            if (favoriteArray.getJSONObject(idx).getJSONObject("show").getInt("id") == favoriteId)
+        for (idx in 0 until favoriteArray.size)
+            if (favoriteArray[idx].id == favoriteId)
                 return idx
         return null
     }

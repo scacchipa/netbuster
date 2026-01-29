@@ -4,33 +4,38 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import ar.com.westsoft.netbuster.R
-import ar.com.westsoft.netbuster.core.adapter.SeriesAdapter
-import ar.com.westsoft.netbuster.databinding.FavoriteLayoutBinding
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 
 class FavoriteFragment(private val callback: MainActivity) : Fragment() {
 
-    private val binding: FavoriteLayoutBinding by lazy {
-        FavoriteLayoutBinding.inflate(layoutInflater)
-    }
+    var favoriteSeriesListState by mutableStateOf(callback.favoriteSeriesList)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
+        return ComposeView(requireContext()).apply {
+            setContent {
+                FavoriteScreen(
+                    seriesList = favoriteSeriesListState,
+                    onFavoriteTapped = { favoriteSeries ->
+                        lifecycleScope.launch {
+                            favoriteSeriesListState = callback.toggleFavorite(favoriteSeries)
+                        }
+                    },
+                    onSeriesTapped = { callback.showSeriesPoster(it) },
+                )
+            }
+        }
+    }
 
-        val recyclerView = binding.root.findViewById<RecyclerView>(R.id.favorite_recycler_view)
-        recyclerView.layoutManager = GridLayoutManager(context, 2)
-
-        callback.favoriteSeriesAdapter = SeriesAdapter(
-            callback, callback.favoriteSeriesArray, callback.favoriteSeriesArray
-        )
-        recyclerView.adapter = callback.favoriteSeriesAdapter
-        recyclerView.invalidate()
-
-        return binding.root
+    fun updateFavoriteSeriesList() {
+        favoriteSeriesListState = callback.favoriteSeriesList
     }
 }
 

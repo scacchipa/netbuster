@@ -10,27 +10,26 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import ar.com.westsoft.netbuster.core.client.TvAPIClient
 import ar.com.westsoft.netbuster.core.ext.findOrNull
-import ar.com.westsoft.netbuster.core.ext.joinToString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 
 class PosterFragment(val callback: MainActivity) : Fragment() {
 
-    var seriesJsonObj: JSONObject? = null
+    var series: Series? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         val rootView = ComposeView(requireContext()).apply {
             setContent {
-                val scheduleObj = seriesJsonObj?.getJSONObject("schedule")
+                val schedule = series?.schedule
 
                 val seasonTree by produceState(initialValue = null as SeasonTree?) {
                     launch(Dispatchers.IO) {
-                        val serialId = seriesJsonObj?.getInt("id") ?: -1
+                        val serialId = series?.id ?: -1
 
                         value = SeasonTree.createFromJsonArray(
-                            seriesTitle = seriesJsonObj?.getString("name") ?: "",
+                            seriesTitle = series?.title ?: "",
                             episodesJSONArray = callback.tvAPIClient!!.getSyncEpisodeArrayJsonResponse(
                                 serialId
                             )
@@ -39,14 +38,18 @@ class PosterFragment(val callback: MainActivity) : Fragment() {
                     }
                 }
 
+                val scheduleText = schedule?.time +
+                        if  (schedule?.days?.isNotEmpty() ?: false)
+                            schedule.days.joinToString(" - ", " (", ")")
+                        else ""
+
                 PosterScreen(
-                    imageUrl = seriesJsonObj!!.getJSONObject("image").getString("original"),
+                    imageUrl = series?.imageUrl ?: "",
                     imageLoader = TvAPIClient.instance.imageLoader,
-                    nameText = seriesJsonObj?.getString("name") ?: "",
-                    scheduleText = scheduleObj?.getString("time") +
-                            " " + scheduleObj?.getJSONArray("days")?.joinToString("- ", "(", ")"),
-                    genderText = seriesJsonObj?.getJSONArray("genres")?.joinToString(" "),
-                    summaryHtml = seriesJsonObj?.getString("summary") ?: "",
+                    nameText = series?.title ?: "",
+                    scheduleText = scheduleText,
+                    genderText = series?.genres?.joinToString(" "),
+                    summaryHtml = series?.summaryHtml ?: "",
                     seasonTree = seasonTree ?: SeasonTree(""),
                     onEpisodeClick = { seasonId, episodeId ->
                         callback.showEpisodeInfo(
@@ -55,9 +58,9 @@ class PosterFragment(val callback: MainActivity) : Fragment() {
                                     it.getInt("season") == seasonId && it.getInt("number") == episodeId
                                 }
                                 ?: JSONObject(),
-                            seriesTitle = seriesJsonObj?.getString("name") ?: "",
+                            seriesTitle = series?.title ?: "",
                         )
-                    }
+                    },
                 )
             }
         }

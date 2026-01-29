@@ -7,6 +7,7 @@ import androidx.preference.PreferenceManager
 import ar.com.westsoft.netbuster.R
 import ar.com.westsoft.netbuster.core.adapter.SeriesAdapter
 import ar.com.westsoft.netbuster.core.client.TvAPIClient
+import ar.com.westsoft.netbuster.core.ext.map
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import org.json.JSONArray
 import org.json.JSONObject
@@ -14,7 +15,7 @@ import org.json.JSONObject
 class MainActivity : FragmentActivity() {
 
     var tvAPIClient: TvAPIClient? = null
-    var favoriteSeriesArray = JSONArray()
+    var favoriteSeriesList = emptyList<Series>()
     var favoriteSeriesAdapter: SeriesAdapter? = null
 
     var searchFragment: SearchFragment? = null
@@ -34,7 +35,12 @@ class MainActivity : FragmentActivity() {
         posterFragment = PosterFragment(this)
         episodeFragment = EpisodeFragment(this)
         configFragment = ConfigFragment(this)
-        favoriteFragment = FavoriteFragment(this)
+        favoriteFragment = FavoriteFragment(this).apply {
+            favoriteSeriesList = JSONArray(PreferenceManager.getDefaultSharedPreferences(baseContext)
+                .getString("favoriteSeries", "[]"))
+                .map { Series.fromJson(it) }
+            updateFavoriteSeriesList()
+        }
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
                 setReorderingAllowed(true)
@@ -71,11 +77,10 @@ class MainActivity : FragmentActivity() {
                 else -> super.onOptionsItemSelected(menuItem)
             }
         }
-        favoriteSeriesArray = JSONArray(PreferenceManager.getDefaultSharedPreferences(baseContext)
-            .getString("favoriteSeries", "[]"))
+
     }
-    fun showSeriesPoster(jsonObject: JSONObject){
-        posterFragment?.seriesJsonObj = jsonObject
+    fun showSeriesPoster(series: Series) {
+        posterFragment?.series = series
         showSeriesPoster()
     }
     fun showSeriesPoster(){
@@ -91,10 +96,22 @@ class MainActivity : FragmentActivity() {
             replace(R.id.fragment_container_view, episodeFragment!!)
         }
     }
-    fun appendToFavoriteArray(seriesJsonObj: JSONObject) {
-        favoriteSeriesArray.put(seriesJsonObj)
+
+    fun toggleFavorite(series: Series): List<Series> {
+        val isFavorite = this.favoriteSeriesList.contains(series)
+        return if (isFavorite) {
+            this.removeFromFavoriteArray(series)
+        } else {
+            this.appendToFavoriteArray(series)
+        }
     }
-    fun removeFromFavoriteArray(favoriteIdPos: Int) {
-        favoriteSeriesArray.remove(favoriteIdPos)
+
+    fun appendToFavoriteArray(series: Series): List<Series> {
+        favoriteSeriesList += series
+        return favoriteSeriesList
+    }
+    fun removeFromFavoriteArray(series: Series): List<Series> {
+        favoriteSeriesList -= series
+        return favoriteSeriesList
     }
 }
