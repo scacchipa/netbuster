@@ -9,7 +9,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NetBuster">
         <activity
-            android:name=".splash.SplashActivity"
+            android:name=".component.SplashActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.NetBuster.NoActionBar"
             android:windowSoftInputMode="stateHidden">
@@ -19,13 +19,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".splash.CheckingActivity"
+            android:name=".component.CheckingActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.NetBuster.NoActionBar"
             android:windowSoftInputMode="stateHidden">
         </activity>
         <activity
-            android:name=".core.activity.MainActivity"
+            android:name=".component.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/Theme.NetBuster.NoActionBar"
             android:windowSoftInputMode="stateHidden">
