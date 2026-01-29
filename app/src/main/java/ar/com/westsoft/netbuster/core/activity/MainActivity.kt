@@ -5,7 +5,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
 import androidx.preference.PreferenceManager
 import ar.com.westsoft.netbuster.R
-import ar.com.westsoft.netbuster.core.adapter.SeriesAdapter
 import ar.com.westsoft.netbuster.core.client.TvAPIClient
 import ar.com.westsoft.netbuster.core.ext.map
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -16,7 +15,7 @@ class MainActivity : FragmentActivity() {
 
     var tvAPIClient: TvAPIClient? = null
     var favoriteSeriesList = emptyList<Series>()
-    var favoriteSeriesAdapter: SeriesAdapter? = null
+//    var favoriteSeriesAdapter: SeriesAdapter? = null
 
     var searchFragment: SearchFragment? = null
     var posterFragment: PosterFragment? = null
