@@ -1,6 +1,5 @@
 package ar.com.westsoft.netbuster.ui.screen
 
-import android.R
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.clickable
@@ -21,22 +20,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import ar.com.westsoft.netbuster.data.type.SeasonTree
+import ar.com.westsoft.netbuster.data.type.Poster
 import ar.com.westsoft.netbuster.ui.widget.ExpandableEpisodeListWidget
 import com.android.volley.toolbox.ImageLoader
 import com.android.volley.toolbox.NetworkImageView
 
 @Composable
 fun PosterScreen(
-    imageUrl: String,
+    poster: Poster,
     imageLoader: ImageLoader,
-    nameText: String,
-    scheduleText: String?,
-    genderText: String?,
-    summaryHtml: String,
-    seasonTree: SeasonTree,
     onEpisodeClick: (seasonId: Int, episodeId: Int) -> Unit,
 ) {
+    val schedule = poster.series?.schedule
+    val scheduleText = (schedule?.time ?: "") +
+            if  (schedule?.days?.isNotEmpty() ?: false)
+                schedule.days.joinToString(" - ", " (", ")")
+            else ""
+
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier.fillMaxSize().verticalScroll(state = scrollState).padding(16.dp),
@@ -46,11 +46,11 @@ fun PosterScreen(
         AndroidView(
             factory = { context ->
                 NetworkImageView(context).apply {
-                    this.setDefaultImageResId(R.drawable.ic_menu_gallery)
+                    this.setDefaultImageResId(android.R.drawable.ic_menu_gallery)
                 }
             },
             modifier = Modifier.fillMaxWidth(0.7f).aspectRatio(1f).padding(8.dp),
-            update = { view -> view.setImageUrl(imageUrl, imageLoader) }
+            update = { view -> view.setImageUrl(poster.series?.imageUrl ?: "", imageLoader) }
         )
         Column(
             modifier = Modifier
@@ -59,22 +59,21 @@ fun PosterScreen(
             horizontalAlignment = Alignment.Start
         ) {
             Text(
-                text = nameText,
+                text = poster.series?.title ?: "",
                 fontSize = 22.sp,
                 color = Color.Black,
                 modifier = Modifier.padding(start = 32.dp, top = 8.dp, bottom = 8.dp)
             )
-
-            if (scheduleText.isNullOrBlank().not()) {
+            if (scheduleText.isBlank().not()) {
                 Text(
                     text = "Schedule: $scheduleText",
                     fontSize = 18.sp,
                     modifier = Modifier.padding(start = 48.dp, top = 8.dp, bottom = 8.dp)
                 )
             }
-            if (genderText.isNullOrBlank().not()) {
+            if (poster.series?.genres.isNullOrEmpty().not()) {
                 Text(
-                    text = genderText,
+                    text = poster.series.genres.joinToString(" "),
                     fontSize = 18.sp,
                     modifier = Modifier.padding(start = 48.dp, top = 8.dp)
                 )
@@ -83,7 +82,7 @@ fun PosterScreen(
         ExpandableEpisodeListWidget(
             title = "Seasons"
         ) {
-            seasonTree.seasonMap.forEach { (seasonId, seasonElement) ->
+            poster.seasonTree?.seasonMap?.forEach { (seasonId, seasonElement) ->
                 ExpandableEpisodeListWidget(
                     title = "Season $seasonId"
                 ) {
@@ -115,7 +114,7 @@ fun PosterScreen(
                 .heightIn(min = 100.dp)
                 .padding(top = 8.dp, bottom = 16.dp),
             update = { webView ->
-                webView.loadData(summaryHtml, "text/html", "UTF-8")
+                webView.loadData(poster.series?.summaryHtml ?: "", "text/html", "UTF-8")
             }
         )
     }

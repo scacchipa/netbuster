@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 @HiltViewModel
 class PosterViewModel @Inject constructor(
     private val tvAPIClient: TvAPIClient,
@@ -36,9 +35,7 @@ class PosterViewModel @Inject constructor(
 
     fun setSeries(series: Series) {
         viewModelScope.launch {
-            _posterSF.emit(
-                Poster(series = series)
-            )
+            _posterSF.emit(Poster(series = series))
             updateSeasonTree(series)
         }
     }
