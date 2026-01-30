@@ -21,7 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import ar.com.westsoft.netbuster.data.type.Series
+import ar.com.westsoft.netbuster.data.type.FavSeries
 import ar.com.westsoft.netbuster.ui.widget.SeriesCard
 import com.android.volley.toolbox.ImageLoader
 
@@ -29,11 +29,11 @@ import com.android.volley.toolbox.ImageLoader
 fun SearchScreen(
     searchQuery: String,
     onQueryChanged: (String) -> Unit,
-    onFavoriteTapped: (Series) -> Unit,
-    onSeriesTapped: (Series) -> Unit,
+    onFavoriteTapped: (FavSeries) -> Unit,
+    onSeriesTapped: (FavSeries) -> Unit,
     onClearTapped: () -> Unit,
     onSearchTapped: () -> Unit,
-    seriesList: List<Series>,
+    seriesList: List<FavSeries>,
     imageLoader: ImageLoader,
 ) {
     Column(

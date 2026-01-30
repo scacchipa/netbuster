@@ -49,8 +49,8 @@ class ExampleInstrumentedTest {
     }
     @Test
     fun asynGetResponse() = runBlocking {
-        assertEquals(tvAPIClient.getSyncSerieStringResponse("girl").length, 13536)
-        assertEquals(tvAPIClient.getSyncSerieArrayJsonResponse("query").length(), 2)
+        assertEquals(tvAPIClient.getSyncSeriesStringResponse("girl").length, 13536)
+        assertEquals(tvAPIClient.getSyncSeriesArrayJsonResponse("query").length(), 2)
         assertEquals(tvAPIClient.getSyncEpisodeArrayJsonResponse(1).length(), 39)
     }
 }

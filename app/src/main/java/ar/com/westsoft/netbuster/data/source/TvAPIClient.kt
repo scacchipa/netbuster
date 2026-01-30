@@ -3,6 +3,8 @@ package ar.com.westsoft.netbuster.data.source
 import android.content.Context
 import android.graphics.Bitmap
 import android.util.LruCache
+import ar.com.westsoft.netbuster.data.type.Series
+import ar.com.westsoft.netbuster.ext.map
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.ImageLoader
@@ -61,12 +63,15 @@ class TvAPIClient @Inject constructor(
             queue.add(jsonObjRequest)
         }
 
-    suspend fun getSyncSerieStringResponse(text: String): String =
+    suspend fun getSyncSeriesStringResponse(text: String): String =
         getSyncStringResponse("$url/search/shows?q=$text")
 
-    suspend fun getSyncSerieArrayJsonResponse(text: String): JSONArray =
+    suspend fun getSyncSeriesArrayJsonResponse(text: String): JSONArray =
         getSyncArrayJsonResponse("$url/search/shows?q=$text")
 
-    suspend fun getSyncEpisodeArrayJsonResponse(serie: Int): JSONArray =
-        getSyncArrayJsonResponse("$url/shows/$serie/episodes")
+    suspend fun getSyncSeriesListResponse(text: String): List<Series> =
+        getSyncArrayJsonResponse("$url/search/shows?q=$text").map { Series.fromJson(it) }
+
+    suspend fun getSyncEpisodeArrayJsonResponse(series: Int): JSONArray =
+        getSyncArrayJsonResponse("$url/shows/$series/episodes")
 }

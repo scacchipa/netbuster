@@ -9,15 +9,15 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import ar.com.westsoft.netbuster.data.type.Series
+import ar.com.westsoft.netbuster.data.type.FavSeries
 import ar.com.westsoft.netbuster.ui.widget.SeriesCard
 import com.android.volley.toolbox.ImageLoader
 
 @Composable
 fun FavoriteScreen(
-    seriesList: List<Series>,
-    onSeriesTapped: (Series) -> Unit,
-    onFavoriteTapped: (Series) -> Unit,
+    seriesList: List<FavSeries>,
+    onSeriesTapped: (FavSeries) -> Unit,
+    onFavoriteTapped: (FavSeries) -> Unit,
     imageLoader: ImageLoader
 ) {
     LazyVerticalGrid(
@@ -40,4 +40,3 @@ fun FavoriteScreen(
         }
     }
 }
-

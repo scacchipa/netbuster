@@ -4,45 +4,35 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.viewModels
 import ar.com.westsoft.netbuster.component.MainActivity
 import ar.com.westsoft.netbuster.data.source.TvAPIClient
 import ar.com.westsoft.netbuster.ui.screen.FavoriteScreen
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class FavoriteFragment(private val callback: MainActivity) : Fragment() {
 
     @Inject lateinit var tvAPIClient: TvAPIClient
-    var favoriteSeriesListState by mutableStateOf(callback.favoriteSeriesList)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         return ComposeView(requireContext()).apply {
             setContent {
+                val viewModel by viewModels<FavoriteViewModel>()
+                val favoriteSeriesListState = viewModel.getFavoriteSeries().collectAsState()
                 FavoriteScreen(
-                    seriesList = favoriteSeriesListState,
-                    onFavoriteTapped = { favoriteSeries ->
-                        lifecycleScope.launch {
-                            favoriteSeriesListState = callback.toggleFavorite(favoriteSeries)
-                        }
-                    },
-                    onSeriesTapped = { callback.showSeriesPoster(it) },
+                    seriesList = favoriteSeriesListState.value,
+                    onFavoriteTapped = { viewModel.toggleFavorite(it) },
+                    onSeriesTapped = { callback.showSeriesPoster(it.toSeries()) },
                     imageLoader = tvAPIClient.imageLoader
                 )
             }
         }
-    }
-
-    fun updateFavoriteSeriesList() {
-        favoriteSeriesListState = callback.favoriteSeriesList
     }
 }

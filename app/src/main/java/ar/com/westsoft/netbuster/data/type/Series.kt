@@ -11,7 +11,6 @@ data class Series(
     val schedule: Schedule,
     val genres: List<String>,
     val summaryHtml: String,
-    val isFavorite: Boolean,
 ) {
     companion object {
         fun fromJson(json: JSONObject, favorites: List<Series> = emptyList()): Series? {
@@ -26,8 +25,6 @@ data class Series(
                     ?: Schedule(),
                 genres = jsonSeries.getJSONArray("genres").toStringList(),
                 summaryHtml = jsonSeries.getString("summary") ?: "",
-                isFavorite = jsonSeries.optBoolean("isFavorite", false) ||
-                        favorites.any { it.id == id },
             )
         }
     }
@@ -41,7 +38,6 @@ data class Series(
             })
             put("genres", genres.toJSONArray())
             put("summary", summaryHtml)
-            put("isFavorite", isFavorite)
         }
     }
 }
