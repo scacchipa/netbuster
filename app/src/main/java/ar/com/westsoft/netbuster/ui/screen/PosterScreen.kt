@@ -88,8 +88,8 @@ fun PosterScreen(
                 ) {
                     seasonElement.episodesMap.forEach { (_, episode) ->
                         Text(
-                            text = (episode.seasonId + 1).toString().padStart(2, '0') + "x" +
-                                    (episode.episodeId + 1).toString().padStart(2, '0') + " - " +
+                            text = (episode.seasonId).toString().padStart(2, '0') + "x" +
+                                    (episode.episodeId).toString().padStart(2, '0') + " - " +
                                     episode.name,
                             fontSize = 18.sp,
                             modifier = Modifier

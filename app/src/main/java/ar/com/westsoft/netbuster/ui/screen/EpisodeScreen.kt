@@ -1,6 +1,5 @@
 package ar.com.westsoft.netbuster.ui.screen
 
-import android.R
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.background
@@ -19,18 +18,14 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import ar.com.westsoft.netbuster.data.type.Episode
 import com.android.volley.toolbox.ImageLoader
 import com.android.volley.toolbox.NetworkImageView
 
 @Composable
 fun EpisodeDetailScreen(
-    seriesTitle: String,
-    episodeTitle: String,
-    seasonNumber: String,
-    episodeNumber: String,
-    imageUrl: String?,
+    episode: Episode,
     imageLoader: ImageLoader,
-    summaryHtml: String,
     onBackClick: () -> Unit,
     onGoToPageClick: () -> Unit,
 ) {
@@ -39,26 +34,19 @@ fun EpisodeDetailScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        // Definición de las referencias (IDs)
         val (txtSerie, txtEpisode, txtSeason, txtEpNumber,
             viewSummary, imgEpisode, btnGo, btnBack) = createRefs()
-
-        // Guidelines
         val guidelineTop = createGuidelineFromTop(0.45f)
         val guidelineVertical = createGuidelineFromStart(0.6f)
-
-        // 1. Título de la Serie
         Text(
-            text = seriesTitle,
+            text = episode.seriesTitle,
             modifier = Modifier.constrainAs(txtSerie) {
                 bottom.linkTo(txtEpisode.top, margin = 8.dp)
                 start.linkTo(txtEpisode.start)
             }
         )
-
-        // 2. Título del Episodio
         Text(
-            text = episodeTitle,
+            text = episode.name,
             fontSize = 22.sp,
             color = Color.Black,
             modifier = Modifier.constrainAs(txtEpisode) {
@@ -69,33 +57,26 @@ fun EpisodeDetailScreen(
                 width = Dimension.fillToConstraints
             }
         )
-
-        // 3. Número de Temporada
         Text(
-            text = seasonNumber,
+            text = "Season: ${episode.seasonId}",
             modifier = Modifier.constrainAs(txtSeason) {
                 top.linkTo(txtEpisode.bottom, margin = 8.dp)
                 start.linkTo(txtEpisode.start, margin = 16.dp)
                 bottom.linkTo(txtEpNumber.top, margin = 8.dp)
             }
         )
-
-        // 4. Número de Episodio
         Text(
-            text = episodeNumber,
+            text = "Episode: ${episode.episodeId}",
             modifier = Modifier.constrainAs(txtEpNumber) {
                 top.linkTo(txtSeason.bottom, margin = 16.dp)
                 start.linkTo(txtEpisode.start, margin = 16.dp)
                 bottom.linkTo(guidelineTop, margin = 16.dp)
             }
         )
-
-        // 5. Imagen del Episodio (Volley)
         AndroidView(
             factory = { context ->
                 NetworkImageView(context).apply {
                     setBackgroundColor(android.graphics.Color.WHITE)
-                    // Aquí asignarías tu ImageLoader de Volley
                 }
             },
             modifier = Modifier.constrainAs(imgEpisode) {
@@ -107,11 +88,9 @@ fun EpisodeDetailScreen(
                 height = Dimension.fillToConstraints
             },
             update = { view ->
-                view.setImageUrl(imageUrl, imageLoader)
+                view.setImageUrl(episode.imageUrl, imageLoader)
             }
         )
-
-        // 6. WebView (Summary)
         AndroidView(
             factory = { context ->
                 WebView(context).apply {
@@ -124,14 +103,12 @@ fun EpisodeDetailScreen(
                 end.linkTo(parent.end, margin = 8.dp)
                 bottom.linkTo(btnGo.top, margin = 16.dp)
                 width = Dimension.fillToConstraints
-                height = Dimension.percent(0.2f) // app:layout_constraintHeight_percent="0.2"
+                height = Dimension.percent(0.2f)
             },
             update = { webView ->
-                webView.loadData(summaryHtml, "text/html", "UTF-8")
+                webView.loadData(episode.summaryHtml, "text/html", "UTF-8")
             }
         )
-
-        // 7. Botón Go to Page
         Button(
             onClick = onGoToPageClick,
             modifier = Modifier.constrainAs(btnGo) {
@@ -143,8 +120,6 @@ fun EpisodeDetailScreen(
         ) {
             Text("Go to Page", fontSize = 16.sp)
         }
-
-        // 8. Botón Volver (Reemplaza ImageButton)
         IconButton(
             onClick = onBackClick,
             modifier = Modifier
@@ -159,7 +134,7 @@ fun EpisodeDetailScreen(
                 }
         ) {
             Icon(
-                painter = painterResource(R.drawable.ic_menu_revert),
+                painter = painterResource(android.R.drawable.ic_menu_revert),
                 contentDescription = "Back",
                 tint = Color.White
             )

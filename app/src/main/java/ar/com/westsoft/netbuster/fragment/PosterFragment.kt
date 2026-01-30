@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import ar.com.westsoft.netbuster.component.MainActivity
 import ar.com.westsoft.netbuster.data.source.TvAPIClient
+import ar.com.westsoft.netbuster.data.type.Episode
 import ar.com.westsoft.netbuster.ext.findOrNull
 import ar.com.westsoft.netbuster.ui.screen.PosterScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,12 +35,14 @@ class PosterFragment(val callback: MainActivity) : Fragment() {
                     imageLoader = tvAPIClient.imageLoader,
                     onEpisodeClick = { seasonId, episodeId ->
                         callback.showEpisodeInfo(
-                            jsonObject = state.seasonTree
-                                ?.jsonArray?.findOrNull {
-                                    it.getInt("season") == seasonId && it.getInt("number") == episodeId
-                                }
-                                ?: JSONObject(),
-                            seriesTitle = state.series?.title ?: "",
+                            episode = Episode.fromJson(
+                                seriesTitle = state.series?.title ?: "",
+                                json = state.seasonTree
+                                    ?.jsonArray?.findOrNull {
+                                        it.getInt("season") == seasonId && it.getInt("number") == episodeId
+                                    }
+                                    ?: JSONObject(),
+                            )
                         )
                     },
                 )
