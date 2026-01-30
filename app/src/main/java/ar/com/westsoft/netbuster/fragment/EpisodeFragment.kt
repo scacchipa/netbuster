@@ -15,13 +15,10 @@ import ar.com.westsoft.netbuster.component.MainActivity
 import ar.com.westsoft.netbuster.data.source.TvAPIClient
 import ar.com.westsoft.netbuster.ui.screen.EpisodeDetailScreen
 import dagger.hilt.android.AndroidEntryPoint
-import org.json.JSONObject
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class EpisodeFragment(private val callback: MainActivity) : Fragment() {
-    var jsonObjEpisode: JSONObject? = null
-    var seriesTitle: String = ""
 
     @Inject lateinit var tvAPIClient: TvAPIClient
 
@@ -38,10 +35,7 @@ class EpisodeFragment(private val callback: MainActivity) : Fragment() {
                     imageLoader = tvAPIClient.imageLoader,
                     onBackClick = { callback.showSeriesPoster() },
                     onGoToPageClick = {
-                        val browserIntent = Intent(
-                            Intent.ACTION_VIEW,
-                            jsonObjEpisode?.optString("url")?.toUri()
-                        )
+                        val browserIntent = Intent(Intent.ACTION_VIEW, state.url?.toUri())
                         startActivity(browserIntent)
                     }
                 )

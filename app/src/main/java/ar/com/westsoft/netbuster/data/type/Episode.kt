@@ -7,6 +7,7 @@ class Episode(
     val seasonId: Int,
     val episodeId: Int,
     val name: String,
+    val url: String,
     val imageUrl: String?,
     val summaryHtml: String,
 ) {
@@ -16,6 +17,7 @@ class Episode(
             seasonId = json.optInt("season"),
             episodeId = json.optInt("number"),
             name = json.optString("name"),
+            url = json.optString("url"),
             imageUrl = json.getJSONObject("image").optString("medium"),
             summaryHtml = json.optString("summary")
         )

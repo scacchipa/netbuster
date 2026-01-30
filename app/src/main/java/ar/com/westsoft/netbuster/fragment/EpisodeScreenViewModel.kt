@@ -12,11 +12,7 @@ import javax.inject.Inject
 @HiltViewModel
 class EpisodeScreenViewModel @Inject constructor() : ViewModel() {
 
-    private val _episodeSF = MutableStateFlow(
-        Episode(
-            "", -1, -1, "", "", ""
-        )
-    )
+    private val _episodeSF = MutableStateFlow(Episode("", -1, -1, "", "", "", ""))
     val episodeSF: StateFlow<Episode> = _episodeSF
 
     fun setEpisode(episode: Episode) {
