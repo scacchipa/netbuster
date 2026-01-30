@@ -32,7 +32,7 @@ class SearchFragment(private val callback: MainActivity) : Fragment() {
             setContent {
                 var searchQuery by remember { mutableStateOf("") }
                 val searchVM by viewModels<SearchViewModel>()
-                val state = searchVM.searchSF.collectAsState()
+                val state by searchVM.searchSF.collectAsState()
                 SearchScreen(
                     searchQuery = searchQuery,
                     onQueryChanged = { str -> searchQuery = str },
@@ -40,7 +40,7 @@ class SearchFragment(private val callback: MainActivity) : Fragment() {
                     onSearchTapped = { searchVM.searchSeries(searchQuery) },
                     onFavoriteTapped = { searchVM.toggleFavorite(it) },
                     onSeriesTapped = { callback.showSeriesPoster(it.toSeries()) },
-                    seriesList = state.value,
+                    seriesList = state,
                     imageLoader = tvAPIClient.imageLoader
                 )
             }

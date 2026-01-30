@@ -1,6 +1,7 @@
 package ar.com.westsoft.netbuster.component
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.commit
 import ar.com.westsoft.netbuster.R
@@ -10,6 +11,7 @@ import ar.com.westsoft.netbuster.fragment.ConfigFragment
 import ar.com.westsoft.netbuster.fragment.EpisodeFragment
 import ar.com.westsoft.netbuster.fragment.FavoriteFragment
 import ar.com.westsoft.netbuster.fragment.PosterFragment
+import ar.com.westsoft.netbuster.fragment.PosterViewModel
 import ar.com.westsoft.netbuster.fragment.SearchFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,6 +21,8 @@ import org.json.JSONObject
 class MainActivity : FragmentActivity() {
 
     var tvAPIClient: TvAPIClient? = null
+
+    val posterViewModel by viewModels<PosterViewModel>()
 
     var searchFragment: SearchFragment? = null
     var posterFragment: PosterFragment? = null
@@ -73,10 +77,9 @@ class MainActivity : FragmentActivity() {
                 else -> super.onOptionsItemSelected(menuItem)
             }
         }
-
     }
     fun showSeriesPoster(series: Series) {
-        posterFragment?.series = series
+        posterViewModel.setSeries(series)
         showSeriesPoster()
     }
     fun showSeriesPoster(){

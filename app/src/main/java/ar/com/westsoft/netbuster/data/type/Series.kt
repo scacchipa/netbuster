@@ -13,7 +13,7 @@ data class Series(
     val summaryHtml: String,
 ) {
     companion object {
-        fun fromJson(json: JSONObject, favorites: List<Series> = emptyList()): Series? {
+        fun fromJson(json: JSONObject): Series? {
             val jsonSeries = json.optJSONObject("show") ?: return null
             val id = jsonSeries.optInt("id")
 
@@ -31,13 +31,16 @@ data class Series(
 
     fun toJSONObject(): JSONObject {
         return JSONObject().apply {
-            put("id", id)
-            put("name", title)
-            put("image", JSONObject().apply {
-                put("medium", imageUrl)
-            })
-            put("genres", genres.toJSONArray())
-            put("summary", summaryHtml)
+            put("show", JSONObject().apply {
+                put("id", id)
+                put("name", title)
+                put("image", JSONObject().apply {
+                    put("medium", imageUrl)
+                })
+                put("genres", genres.toJSONArray())
+                put("summary", summaryHtml)
+            }
+            )
         }
     }
 }
