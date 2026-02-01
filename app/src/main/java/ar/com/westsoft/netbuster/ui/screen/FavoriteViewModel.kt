@@ -1,4 +1,4 @@
-package ar.com.westsoft.netbuster.fragment
+package ar.com.westsoft.netbuster.ui.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,7 +21,7 @@ class FavoriteViewModel @Inject constructor(
 
     fun getFavoriteSeries() = favoriteSeriesRepository.getFavoriteSeriesStateFlow()
         .map { seriesList ->
-            seriesList.map { series ->
+            seriesList.values.map { series ->
                 FavSeries(
                     id = series.id,
                     title = series.title,
@@ -37,7 +37,10 @@ class FavoriteViewModel @Inject constructor(
 
     fun toggleFavorite(favSeries: FavSeries) {
         viewModelScope.launch() {
-            favoriteSeriesRepository.toggleFavorite(favSeries.toSeries())
+            favoriteSeriesRepository.toggleFavorite(favSeries.toSeries()
+                .also {
+                    println(it)
+                })
         }
     }
 

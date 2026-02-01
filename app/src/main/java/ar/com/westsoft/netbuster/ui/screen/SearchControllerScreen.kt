@@ -1,4 +1,4 @@
-package ar.com.westsoft.netbuster.fragment
+package ar.com.westsoft.netbuster.ui.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -8,7 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import ar.com.westsoft.netbuster.data.type.Series
-import ar.com.westsoft.netbuster.ui.screen.SearchScreen
+import ar.com.westsoft.netbuster.ui.screen.SearchViewModel
 
 @Composable
 fun SearchControllerScreen(

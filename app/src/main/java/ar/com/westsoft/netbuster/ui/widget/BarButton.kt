@@ -34,10 +34,10 @@ fun BarButton(
             )
     ) {
         Column(
-            modifier = Modifier.Companion
-                .align(Alignment.Companion.Center)
+            modifier = Modifier
+                .align(Alignment.Center)
                 .clickable(onClick = onClick),
-            horizontalAlignment = Alignment.Companion.CenterHorizontally,
+            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
             Text(text)

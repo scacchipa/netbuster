@@ -20,3 +20,8 @@ fun List<String>.toJSONArray(): JSONArray {
         }
     }
 }
+
+@JvmName("seriesListToMap")
+fun List<Series>.toMap() : Map<Int, Series> {
+    return this.associateBy { series -> series.id }
+}

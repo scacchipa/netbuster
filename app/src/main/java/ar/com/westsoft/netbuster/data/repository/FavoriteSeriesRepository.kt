@@ -9,15 +9,7 @@ class FavoriteSeriesRepository @Inject constructor(
     private val localStore: LocalStore
 ) {
 
-    fun getFavoriteSeriesStateFlow(): StateFlow<List<Series>> = localStore.favoriteSeriesSF
-
-    fun getFavoriteSeries(): List<Series> {
-        return localStore.retrieveFavoriteSeries()
-    }
-
-    suspend fun saveFavoriteSeries(seriesList: List<Series>) {
-        localStore.storeFavoriteSeriesList(seriesList)
-    }
+    fun getFavoriteSeriesStateFlow(): StateFlow<Map<Int, Series>> = localStore.favoriteSeriesSF
 
     suspend fun toggleFavorite(series: Series) {
         localStore.toggleFavorite(series)

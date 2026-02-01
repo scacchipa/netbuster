@@ -1,4 +1,4 @@
-package ar.com.westsoft.netbuster.fragment
+package ar.com.westsoft.netbuster.ui.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -37,20 +37,23 @@ class SearchViewModel @Inject constructor(
                 schedule = series.schedule,
                 genres = series.genres,
                 summaryHtml = series.summaryHtml,
-                isFavorite = favoriteList.any { it.id == series.id }
+                isFavorite = favoriteList[series.id] != null
             )
         }
     }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
     fun searchSeries(searchQuery: String) {
-        viewModelScope.launch(defaultDispatcher) {
+        viewModelScope.launch {
             seriesListRepository.searchSeries(searchQuery)
         }
     }
 
     fun toggleFavorite(favSeries: FavSeries) {
         viewModelScope.launch(defaultDispatcher) {
-            favoriteSeriesRepository.toggleFavorite(favSeries.toSeries())
+            favoriteSeriesRepository.toggleFavorite(favSeries.toSeries().also {
+                println(it)
+            }
+            )
         }
     }
 

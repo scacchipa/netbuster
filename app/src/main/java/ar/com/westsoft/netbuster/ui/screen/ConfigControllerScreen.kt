@@ -1,10 +1,9 @@
-package ar.com.westsoft.netbuster.fragment
+package ar.com.westsoft.netbuster.ui.screen
 
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import ar.com.westsoft.netbuster.ui.screen.ConfigScreen
 
 @Composable
 fun ConfigControllerScreen(

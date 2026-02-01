@@ -1,10 +1,10 @@
-package ar.com.westsoft.netbuster.fragment
+package ar.com.westsoft.netbuster.ui.screen
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import ar.com.westsoft.netbuster.ui.screen.PosterScreen
+import ar.com.westsoft.netbuster.ui.screen.PosterViewModel
 
 @Composable
 fun PosterControllerScreen(

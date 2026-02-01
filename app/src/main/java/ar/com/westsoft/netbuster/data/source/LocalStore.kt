@@ -6,6 +6,7 @@ import androidx.core.content.edit
 import ar.com.westsoft.netbuster.data.type.Series
 import ar.com.westsoft.netbuster.ext.map
 import ar.com.westsoft.netbuster.ext.toJSONArray
+import ar.com.westsoft.netbuster.ext.toMap
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,32 +24,33 @@ class LocalStore @Inject constructor(
     val configSharedPref: SharedPreferences =
         context.getSharedPreferences("config", Context.MODE_PRIVATE)
 
-    private val _favoriteSeriesSF = MutableStateFlow<List<Series>>(
+    private val _favoriteSeriesSF = MutableStateFlow<Map<Int, Series>>(
         retrieveFavoriteSeries()
     )
 
-    val favoriteSeriesSF: StateFlow<List<Series>> = _favoriteSeriesSF
+    val favoriteSeriesSF: StateFlow<Map<Int,Series>> = _favoriteSeriesSF
 
-    fun retrieveFavoriteSeries(): List<Series> = JSONArray(favoriteSharedPref.getString("favoriteSeries", "[]"))
+    fun retrieveFavoriteSeries(): Map<Int,Series> = JSONArray(favoriteSharedPref.getString("favoriteSeries", "[]"))
         .map { Series.fromJson(it) }
+        .toMap()
 
-    suspend fun storeFavoriteSeriesList(seriesList: List<Series>) {
+    suspend fun storeFavoriteSeriesList(seriesList: Map<Int, Series>) {
         favoriteSharedPref.edit {
-            putString("favoriteSeries", seriesList.toJSONArray().toString())
+            putString("favoriteSeries", seriesList.values.toList().toJSONArray().toString())
         }
         _favoriteSeriesSF.emit(seriesList)
     }
 
     suspend fun addFavoriteSeries(series: Series) {
-        storeFavoriteSeriesList(_favoriteSeriesSF.value + series)
+        storeFavoriteSeriesList(_favoriteSeriesSF.value + (series.id to series))
     }
 
     suspend fun removeFavoriteSeries(series: Series) {
-        storeFavoriteSeriesList(_favoriteSeriesSF.value - series)
+        storeFavoriteSeriesList(_favoriteSeriesSF.value - (series.id))
     }
 
     suspend fun toggleFavorite(series: Series) {
-        if (_favoriteSeriesSF.value.any { it.id == series.id }) {
+        if (_favoriteSeriesSF.value[series.id] != null) {
             removeFavoriteSeries(series)
         } else {
             addFavoriteSeries(series)

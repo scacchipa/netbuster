@@ -1,4 +1,4 @@
-package ar.com.westsoft.netbuster.fragment
+package ar.com.westsoft.netbuster.ui.screen
 
 import androidx.lifecycle.ViewModel
 import ar.com.westsoft.netbuster.data.repository.ConfigRepository
