@@ -6,7 +6,6 @@ import org.json.JSONObject
 class SeasonTree(
     val seriesTitle: String = "",
     val seasonMap: Map<Int, Season> = emptyMap(),
-    val jsonArray: JSONArray = JSONArray(),
 ) {
     fun addEpisode(episode: Episode): SeasonTree {
 
@@ -19,7 +18,6 @@ class SeasonTree(
         return SeasonTree(
             seriesTitle = seriesTitle,
             seasonMap = seasonMap + (episode.seasonId to season),
-            jsonArray = jsonArray
         )
     }
 
@@ -31,7 +29,6 @@ class SeasonTree(
 
             var seasonTree = SeasonTree(
                 seriesTitle = seriesTitle,
-                jsonArray = episodesJSONArray
             )
 
             for (idx in 0 until episodesJSONArray.length()) {

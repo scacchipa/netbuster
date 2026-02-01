@@ -3,7 +3,9 @@ package ar.com.westsoft.netbuster.fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ar.com.westsoft.netbuster.data.repository.FavoriteSeriesRepository
+import ar.com.westsoft.netbuster.data.source.TvAPIClient
 import ar.com.westsoft.netbuster.data.type.FavSeries
+import com.android.volley.toolbox.ImageLoader
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -13,7 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoriteViewModel @Inject constructor(
-    private val favoriteSeriesRepository: FavoriteSeriesRepository
+    private val favoriteSeriesRepository: FavoriteSeriesRepository,
+    private val tvAPIClient: TvAPIClient,
 ): ViewModel() {
 
     fun getFavoriteSeries() = favoriteSeriesRepository.getFavoriteSeriesStateFlow()
@@ -37,4 +40,6 @@ class FavoriteViewModel @Inject constructor(
             favoriteSeriesRepository.toggleFavorite(favSeries.toSeries())
         }
     }
+
+    fun getImageLoader(): ImageLoader = tvAPIClient.imageLoader
 }

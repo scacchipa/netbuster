@@ -52,6 +52,8 @@ class TvAPIClient @Inject constructor(
                 { response -> continuation.resume(response) },
                 { continuation.resumeWithException(it) })
             queue.add(jsonArrayRequest)
+        }.also {
+            println(it)
         }
     suspend fun getSyncObjectJsonResponse(text: String): JSONObject =
         suspendCoroutine { continuation ->

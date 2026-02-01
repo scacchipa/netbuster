@@ -39,4 +39,6 @@ class PosterViewModel @Inject constructor(
             updateSeasonTree(series)
         }
     }
+
+    fun getTvAPIClient() = tvAPIClient
 }

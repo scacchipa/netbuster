@@ -1,5 +1,6 @@
 package ar.com.westsoft.netbuster.ui.screen
 
+import android.net.Uri
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.background
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import androidx.core.net.toUri
 import ar.com.westsoft.netbuster.data.type.Episode
 import com.android.volley.toolbox.ImageLoader
 import com.android.volley.toolbox.NetworkImageView
@@ -27,20 +29,20 @@ fun EpisodeDetailScreen(
     episode: Episode,
     imageLoader: ImageLoader,
     onBackClick: () -> Unit,
-    onGoToPageClick: () -> Unit,
+    onGoToPage: (Uri) -> Unit
 ) {
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
-        val (txtSerie, txtEpisode, txtSeason, txtEpNumber,
+        val (txtSeries, txtEpisode, txtSeason, txtEpNumber,
             viewSummary, imgEpisode, btnGo, btnBack) = createRefs()
         val guidelineTop = createGuidelineFromTop(0.45f)
         val guidelineVertical = createGuidelineFromStart(0.6f)
         Text(
             text = episode.seriesTitle,
-            modifier = Modifier.constrainAs(txtSerie) {
+            modifier = Modifier.constrainAs(txtSeries) {
                 bottom.linkTo(txtEpisode.top, margin = 8.dp)
                 start.linkTo(txtEpisode.start)
             }
@@ -109,17 +111,6 @@ fun EpisodeDetailScreen(
                 webView.loadData(episode.summaryHtml, "text/html", "UTF-8")
             }
         )
-        Button(
-            onClick = onGoToPageClick,
-            modifier = Modifier.constrainAs(btnGo) {
-                bottom.linkTo(parent.bottom)
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                top.linkTo(viewSummary.bottom)
-            }
-        ) {
-            Text("Go to Page", fontSize = 16.sp)
-        }
         IconButton(
             onClick = onBackClick,
             modifier = Modifier
@@ -138,6 +129,17 @@ fun EpisodeDetailScreen(
                 contentDescription = "Back",
                 tint = Color.White
             )
+        }
+        Button(
+            onClick = { onGoToPage(episode.url.toUri()) },
+            modifier = Modifier.constrainAs(btnGo) {
+                bottom.linkTo(parent.bottom)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                top.linkTo(viewSummary.bottom)
+            }
+        ) {
+            Text("Go to Page", fontSize = 16.sp)
         }
     }
 }

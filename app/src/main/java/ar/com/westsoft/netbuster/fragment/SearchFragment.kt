@@ -39,7 +39,9 @@ class SearchFragment(private val callback: MainActivity) : Fragment() {
                     onClearTapped = { searchQuery = "" },
                     onSearchTapped = { searchVM.searchSeries(searchQuery) },
                     onFavoriteTapped = { searchVM.toggleFavorite(it) },
-                    onSeriesTapped = { callback.showSeriesPoster(it.toSeries()) },
+                    onSeriesTapped = {
+//                        callback.showSeriesPoster(it.toSeries())
+                                     },
                     seriesList = state,
                     imageLoader = tvAPIClient.imageLoader
                 )
@@ -47,3 +49,4 @@ class SearchFragment(private val callback: MainActivity) : Fragment() {
         }
     }
 }
+

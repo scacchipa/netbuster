@@ -29,7 +29,7 @@ class FavoriteFragment(private val callback: MainActivity) : Fragment() {
                 FavoriteScreen(
                     seriesList = favoriteSeriesListState.value,
                     onFavoriteTapped = { viewModel.toggleFavorite(it) },
-                    onSeriesTapped = { callback.showSeriesPoster(it.toSeries()) },
+                    onSeriesTapped = { },
                     imageLoader = tvAPIClient.imageLoader
                 )
             }
