@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.preference.PreferenceManager
 import ar.com.westsoft.netbuster.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -18,7 +17,7 @@ class SplashActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             delay(3000)
-            val sharedPref = PreferenceManager.getDefaultSharedPreferences(baseContext)
+            val sharedPref = applicationContext.getSharedPreferences("config", MODE_PRIVATE)
 
             if (sharedPref?.getBoolean("authMode", false) == true) {
                 startActivity(Intent(baseContext, CheckingActivity::class.java))

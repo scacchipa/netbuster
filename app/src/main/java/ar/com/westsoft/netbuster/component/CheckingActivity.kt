@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricManager
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
-import androidx.preference.PreferenceManager
 import ar.com.westsoft.netbuster.R
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.Executor
@@ -24,7 +23,7 @@ class CheckingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.checking_view)
-        val sharedPref = PreferenceManager.getDefaultSharedPreferences(baseContext)
+        val sharedPref = applicationContext.getSharedPreferences("config", MODE_PRIVATE)
         val biometricLoginButton = findViewById<ImageButton>(R.id.fingetButton)
         val checkPIN = findViewById<Button>(R.id.check_pin)
         val passwordTE = findViewById<EditText>(R.id.password)
