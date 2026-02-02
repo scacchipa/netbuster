@@ -1,4 +1,4 @@
-package ar.com.westsoft.netbuster.ui.screen
+package ar.com.westsoft.netbuster.ui.screen.search
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

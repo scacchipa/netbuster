@@ -1,4 +1,4 @@
-package ar.com.westsoft.netbuster.ui.screen
+package ar.com.westsoft.netbuster.ui.screen.favorite
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues

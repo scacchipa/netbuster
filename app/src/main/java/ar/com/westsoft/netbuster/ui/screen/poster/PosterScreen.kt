@@ -1,5 +1,6 @@
-package ar.com.westsoft.netbuster.ui.screen
+package ar.com.westsoft.netbuster.ui.screen.poster
 
+import android.R
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.clickable
@@ -46,7 +47,7 @@ fun PosterScreen(
         AndroidView(
             factory = { context ->
                 NetworkImageView(context).apply {
-                    this.setDefaultImageResId(android.R.drawable.ic_menu_gallery)
+                    this.setDefaultImageResId(R.drawable.ic_menu_gallery)
                 }
             },
             modifier = Modifier.fillMaxWidth(0.7f).aspectRatio(1f).padding(8.dp),

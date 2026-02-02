@@ -15,11 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import ar.com.westsoft.netbuster.enums.NavButton
 import ar.com.westsoft.netbuster.enums.Route
-import ar.com.westsoft.netbuster.ui.screen.ConfigControllerScreen
-import ar.com.westsoft.netbuster.ui.screen.EpisodeDetailControllerScreen
-import ar.com.westsoft.netbuster.ui.screen.FavoriteControllerScreen
-import ar.com.westsoft.netbuster.ui.screen.PosterControllerScreen
-import ar.com.westsoft.netbuster.ui.screen.SearchControllerScreen
+import ar.com.westsoft.netbuster.ui.screen.config.ConfigControllerScreen
+import ar.com.westsoft.netbuster.ui.screen.episodedetail.EpisodeDetailControllerScreen
+import ar.com.westsoft.netbuster.ui.screen.favorite.FavoriteControllerScreen
+import ar.com.westsoft.netbuster.ui.screen.poster.PosterControllerScreen
+import ar.com.westsoft.netbuster.ui.screen.search.SearchControllerScreen
 import ar.com.westsoft.netbuster.ui.widget.BarButton
 
 @Composable

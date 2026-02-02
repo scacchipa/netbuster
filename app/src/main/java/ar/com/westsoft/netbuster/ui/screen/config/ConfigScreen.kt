@@ -1,5 +1,6 @@
-package ar.com.westsoft.netbuster.ui.screen
+package ar.com.westsoft.netbuster.ui.screen.config
 
+import android.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -66,9 +67,9 @@ fun ConfigScreen(
                 modifier = Modifier.size(48.dp),
                 painter = painterResource(id =
                     if (password == repeatPassword && password.isNotEmpty())
-                        android.R.drawable.checkbox_on_background
+                        R.drawable.checkbox_on_background
                     else
-                        android.R.drawable.checkbox_off_background),
+                        R.drawable.checkbox_off_background),
                 contentDescription = "Checkbox"
             )
         }

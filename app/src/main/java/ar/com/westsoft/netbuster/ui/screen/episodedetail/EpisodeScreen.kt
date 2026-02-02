@@ -1,5 +1,6 @@
-package ar.com.westsoft.netbuster.ui.screen
+package ar.com.westsoft.netbuster.ui.screen.episodedetail
 
+import android.R
 import android.net.Uri
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -125,7 +126,7 @@ fun EpisodeDetailScreen(
                 }
         ) {
             Icon(
-                painter = painterResource(android.R.drawable.ic_menu_revert),
+                painter = painterResource(R.drawable.ic_menu_revert),
                 contentDescription = "Back",
                 tint = Color.White
             )

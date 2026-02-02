@@ -1,4 +1,4 @@
-package ar.com.westsoft.netbuster.ui.screen
+package ar.com.westsoft.netbuster.ui.screen.search
 
 import android.R
 import androidx.compose.foundation.layout.Arrangement

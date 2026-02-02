@@ -1,11 +1,11 @@
-package ar.com.westsoft.netbuster.ui.screen
+package ar.com.westsoft.netbuster.ui.screen.favorite
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import ar.com.westsoft.netbuster.data.type.Series
-import ar.com.westsoft.netbuster.ui.screen.FavoriteViewModel
-import ar.com.westsoft.netbuster.ui.screen.PosterViewModel
+import ar.com.westsoft.netbuster.ui.screen.favorite.FavoriteViewModel
+import ar.com.westsoft.netbuster.ui.screen.poster.PosterViewModel
 
 @Composable
 fun FavoriteControllerScreen(
