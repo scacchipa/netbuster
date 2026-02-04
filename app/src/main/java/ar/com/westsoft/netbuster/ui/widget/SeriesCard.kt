@@ -66,6 +66,7 @@ fun SeriesCard(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
+                    modifier = Modifier.weight(1f),
                     text = title,
                     fontSize = 18.sp,
                     textAlign = TextAlign.Center,

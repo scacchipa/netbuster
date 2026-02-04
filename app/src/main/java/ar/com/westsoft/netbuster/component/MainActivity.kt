@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.fragment.app.FragmentActivity
 import ar.com.westsoft.netbuster.data.source.TvAPIClient
+import ar.com.westsoft.netbuster.ui.MainController
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
