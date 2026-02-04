@@ -12,7 +12,7 @@ class Authenticator @Inject constructor(
 ) {
     fun checkBiometricDeviceIsOk(): Boolean {
         val biometric = BiometricManager.from(context).canAuthenticate(
-            BiometricManager.Authenticators.BIOMETRIC_STRONG
+            BiometricManager.Authenticators.BIOMETRIC_WEAK
                     or BiometricManager.Authenticators.DEVICE_CREDENTIAL
         )
         return when (biometric) {
