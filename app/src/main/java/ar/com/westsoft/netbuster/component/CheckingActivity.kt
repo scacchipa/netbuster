@@ -17,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
 import ar.com.westsoft.netbuster.ui.screen.checkin.CheckInScreen
+import ar.com.westsoft.netbuster.ui.screen.checkin.CheckInViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
