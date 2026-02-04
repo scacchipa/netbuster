@@ -8,8 +8,6 @@ class ConfigRepository @Inject constructor(
 ) {
     fun getAuthMode(): Boolean = localStore.retrieveAuthMode()
 
-    fun getPassword(): String = localStore.retrievePassword()
-
     fun storeAuthConfig(authMode: Boolean, password: String) {
         localStore.storeAuthConfig(authMode, password)
     }

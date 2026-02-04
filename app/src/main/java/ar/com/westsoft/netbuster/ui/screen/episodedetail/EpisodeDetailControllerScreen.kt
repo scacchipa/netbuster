@@ -6,7 +6,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import ar.com.westsoft.netbuster.ui.screen.episodedetail.EpisodeScreenViewModel
 
 @Composable
 fun EpisodeDetailControllerScreen(
@@ -18,7 +17,7 @@ fun EpisodeDetailControllerScreen(
 
     EpisodeDetailScreen(
         episode = state,
-        imageLoader = episodeVM.getTvAPIClient().imageLoader,
+        imageLoader = episodeVM.getImageLoader(),
         onBackClick = {
             onGoToPoster()
         },

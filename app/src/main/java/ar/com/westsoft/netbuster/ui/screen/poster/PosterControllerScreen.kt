@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import ar.com.westsoft.netbuster.ui.screen.poster.PosterViewModel
 import ar.com.westsoft.netbuster.ui.screen.episodedetail.EpisodeScreenViewModel
 
 @Composable
@@ -17,7 +16,7 @@ fun PosterControllerScreen(
 
     PosterScreen(
         poster = state,
-        imageLoader = posterVM.getTvAPIClient().imageLoader,
+        imageLoader = posterVM.getImageLoader(),
         onEpisodeClick = { seasonId, episodeId ->
             episodeVM.setEpisode(
                 state.seasonTree?.seasonMap[seasonId]?.episodesMap[episodeId]

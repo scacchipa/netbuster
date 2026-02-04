@@ -2,8 +2,9 @@ package ar.com.westsoft.netbuster.ui.screen.episodedetail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import ar.com.westsoft.netbuster.data.source.TvAPIClient
 import ar.com.westsoft.netbuster.data.type.Episode
+import ar.com.westsoft.netbuster.usecase.GetImageLoaderUseCase
+import com.android.volley.toolbox.ImageLoader
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class EpisodeScreenViewModel @Inject constructor(
-    private val tvAPIClient: TvAPIClient,
+    private val getImageLoaderUseCase: GetImageLoaderUseCase,
 ) : ViewModel() {
 
     private val _episodeSF = MutableStateFlow(Episode("", -1, -1, "", "", "", ""))
@@ -22,5 +23,5 @@ class EpisodeScreenViewModel @Inject constructor(
         viewModelScope.launch { _episodeSF.emit(episode) }
     }
 
-    fun getTvAPIClient() = tvAPIClient
+    fun getImageLoader(): ImageLoader = getImageLoaderUseCase()
 }

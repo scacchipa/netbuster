@@ -1,19 +1,26 @@
 package ar.com.westsoft.netbuster.ui.screen.config
 
 import androidx.lifecycle.ViewModel
-import ar.com.westsoft.netbuster.data.repository.ConfigRepository
+import androidx.lifecycle.viewModelScope
+import ar.com.westsoft.netbuster.di.DefaultDispatcher
+import ar.com.westsoft.netbuster.usecase.GetAuthModeUseCase
+import ar.com.westsoft.netbuster.usecase.StoreAuthConfigUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ConfigViewModel @Inject constructor(
-    val configRepository: ConfigRepository
+    private val getAuthModeUseCase: GetAuthModeUseCase,
+    private val storeAuthConfigUseCase: StoreAuthConfigUseCase,
+    @param:DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher
 ): ViewModel() {
-    fun getAuthMode(): Boolean = configRepository.getAuthMode()
-
-    fun getPassword(): String = configRepository.getPassword()
+    fun getAuthMode(): Boolean = getAuthModeUseCase()
 
     fun saveAuthConfig(authMode: Boolean, password: String) {
-        configRepository.storeAuthConfig(authMode, password)
+        viewModelScope.launch(defaultDispatcher) {
+            storeAuthConfigUseCase(authMode, password)
+        }
     }
 }

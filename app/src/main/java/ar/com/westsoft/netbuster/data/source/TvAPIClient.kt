@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.util.LruCache
 import ar.com.westsoft.netbuster.data.type.Series
+import ar.com.westsoft.netbuster.di.IoDispatcher
 import ar.com.westsoft.netbuster.ext.map
 import com.android.volley.Request
 import com.android.volley.RequestQueue
@@ -13,6 +14,8 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.json.JSONObject
 import javax.inject.Inject
@@ -21,7 +24,8 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class TvAPIClient @Inject constructor(
-    @param:ApplicationContext val context: Context
+    @param:ApplicationContext val context: Context,
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) {
 
     val url: String = "https://api.tvmaze.com"
@@ -37,7 +41,7 @@ class TvAPIClient @Inject constructor(
         }
     })
 
-    suspend fun getSyncStringResponse(text: String): String =
+    suspend fun getSyncStringResponse(text: String): String = withContext(ioDispatcher) {
         suspendCoroutine { continuation ->
             val stringRequest = StringRequest(
                 text,
@@ -45,17 +49,17 @@ class TvAPIClient @Inject constructor(
                 { continuation.resumeWithException(it) })
             queue.add(stringRequest)
         }
-    suspend fun getSyncArrayJsonResponse(text: String): JSONArray =
+    }
+    suspend fun getSyncArrayJsonResponse(text: String): JSONArray = withContext(ioDispatcher) {
         suspendCoroutine { continuation ->
             val jsonArrayRequest = JsonArrayRequest(
                 text,
                 { response -> continuation.resume(response) },
                 { continuation.resumeWithException(it) })
             queue.add(jsonArrayRequest)
-        }.also {
-            println(it)
         }
-    suspend fun getSyncObjectJsonResponse(text: String): JSONObject =
+    }
+    suspend fun getSyncObjectJsonResponse(text: String): JSONObject = withContext(ioDispatcher) {
         suspendCoroutine { continuation ->
             val jsonObjRequest = JsonObjectRequest(
                 Request.Method.GET,
@@ -64,6 +68,7 @@ class TvAPIClient @Inject constructor(
                 { continuation.resumeWithException(it) })
             queue.add(jsonObjRequest)
         }
+    }
 
     suspend fun getSyncSeriesStringResponse(text: String): String =
         getSyncStringResponse("$url/search/shows?q=$text")
